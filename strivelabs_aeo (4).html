@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Strivelabs AEO</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f0ede8;--white:#fff;--border:#e8e5e0;
+  --text:#1a1a1a;--muted:#6b7280;--subtle:#9ca3af;
+  --indigo:#4F46E5;--indigo-l:#eef2ff;--slate:#1e293b;
+  --h5:#3730a3;--h4:#4F46E5;--h3:#818cf8;--h2:#c7d2fe;--h1:#e0e7ff;
+}
+body{background:var(--bg);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text)}
+.shell{display:flex;height:100vh}
+
+/* sidebar */
+.sidebar{width:196px;flex-shrink:0;background:var(--white);border-right:1px solid var(--border);padding:20px 0}
+.logo{padding:0 18px 24px;font-size:15px;font-weight:700}
+.logo span{color:var(--indigo)}
+.nav-lbl{padding:6px 18px;font-size:10px;font-weight:600;color:var(--subtle);letter-spacing:.08em;text-transform:uppercase}
+.ni{padding:7px 18px;display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);cursor:pointer;border-left:2px solid transparent}
+.ni:hover{background:#f9f8f6}
+.ni.active{color:var(--indigo);font-weight:600;background:var(--indigo-l);border-left-color:var(--indigo)}
+
+/* pages */
+.page{display:none;flex:1;overflow-y:auto;padding:28px 28px 48px}
+.page.active{display:block}
+.ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px}
+.pt{font-size:20px;font-weight:700;color:var(--slate)}
+.ps{font-size:12px;color:var(--muted);margin-top:3px}
+
+/* cards */
+.card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:14px}
+.clbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--subtle);margin-bottom:16px}
+
+/* buttons */
+.btn-primary{background:var(--indigo);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-primary:hover{background:#4338ca}
+.btn-outline{background:none;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit}
+.btn-outline:hover{background:#f5f5f5}
+.fsel{padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:var(--white);font-size:11px;color:var(--text);font-family:inherit;cursor:pointer;outline:none}
+
+/* ── OVERVIEW ── */
+.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.kpi{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.kpi-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--subtle);margin-bottom:6px}
+.kpi-val{font-size:26px;font-weight:700;color:var(--slate)}
+.kpi-d{font-size:11px;margin-top:4px}
+.up{color:#166534}.dn{color:#991b1b}.nt{color:var(--muted)}
+.hchips{display:flex;gap:8px;margin-top:8px}
+.hc{font-size:11px;font-weight:600;padding:3px 9px;border-radius:5px}
+.hcw{background:var(--h5);color:#fff}
+.hcm{background:var(--h3);color:#fff}
+.hcg{background:var(--h1);color:var(--indigo)}
+
+.lb-row{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.lb-row:last-child{margin-bottom:0}
+.lb-rank{width:28px;font-size:12px;font-weight:700;color:var(--muted);flex-shrink:0}
+.lb-name{width:120px;flex-shrink:0;font-size:13px;font-weight:500}
+.lb-you{color:var(--indigo);font-weight:700}
+.lb-bw{flex:1;height:22px;background:#f1f5f9;border-radius:5px;overflow:hidden}
+.lb-bar{height:100%;display:flex;align-items:center;padding-left:10px;font-size:11px;font-weight:600;color:#fff;border-radius:5px}
+.lb-pct{width:40px;text-align:right;font-size:13px;font-weight:700;color:var(--slate);flex-shrink:0}
+
+.chart-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.chart-wrap{position:relative;height:220px}
+.cleg{display:flex;gap:16px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);flex-wrap:wrap}
+.cl{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
+.cs{width:12px;height:12px;border-radius:3px}
+.toggle-btn{background:none;border:none;padding:4px 10px;border-radius:4px;font-size:11px;color:var(--muted);cursor:pointer;font-family:inherit}
+.toggle-btn.active{background:var(--white);color:var(--indigo);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+
+/* ── PROMPTS ── */
+.intent-chart{display:flex;flex-direction:column;gap:9px}
+.irow{display:flex;align-items:center;gap:12px}
+.iname{width:180px;flex-shrink:0;font-size:12px;font-weight:500}
+.bwrap{flex:1;height:26px;border-radius:6px;overflow:hidden;display:flex;background:#f1f5f9}
+.seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;cursor:pointer}
+.seg:hover{opacity:.85}
+.seg.w{background:var(--h5);color:#fff}
+.seg.m{background:var(--h3);color:#fff}
+.seg.g{background:var(--h1);color:var(--indigo)}
+.seg.e{flex:1;background:#f1f5f9;color:var(--subtle);font-size:11px;font-style:italic;font-weight:400}
+.icnt{width:60px;text-align:right;font-size:11px;color:var(--subtle);flex-shrink:0}
+.pleg{display:flex;gap:16px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.pl{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
+.psw{width:12px;height:12px;border-radius:3px}
+
+.hm-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.hm-tbl{border-collapse:separate;border-spacing:4px}
+.hm-tbl th{font-size:10px;font-weight:600;color:var(--muted);text-align:center;padding:0 0 8px;white-space:pre-line;line-height:1.4;width:64px}
+.hm-tbl th.rh{text-align:left;padding-right:14px;font-size:12px;color:var(--text);font-weight:500;width:160px}
+.hm-tbl td.rh{font-size:12px;font-weight:500;color:var(--text);padding-right:14px;white-space:nowrap;vertical-align:middle}
+.hm-leg{display:flex;align-items:center;gap:6px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
+.hml{font-size:11px;color:var(--subtle)}
+.hmsc{display:flex;gap:3px}
+.hmsw{width:18px;height:10px;border-radius:2px}
+
+.tcard{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.tbar{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.tlbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--subtle)}
+.tfs{display:flex;gap:6px}
+.fb{padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--white);font-size:11px;color:var(--muted);cursor:pointer;font-family:inherit}
+.fb.active{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+table{width:100%;border-collapse:collapse}
+thead th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--subtle);padding:9px 14px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+tbody tr.dr{border-bottom:1px solid #f5f4f1;cursor:pointer}
+tbody tr.dr:hover{background:#faf9f7}
+tbody tr.dr.open{background:#faf9f7}
+tbody td{padding:12px 14px;vertical-align:middle}
+.ptxt{font-weight:500;font-size:13px}
+.itag{display:inline-block;margin-top:4px;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:600}
+.it-alt{background:#eef2ff;color:#4338ca}
+.it-best{background:#ede9fe;color:#6d28d9}
+.it-wrk{background:#e0e7ff;color:#3730a3}
+.it-prb{background:#e8eaf6;color:#3949ab}
+.it-wrt{background:#f0f4ff;color:#4F46E5}
+.met{font-weight:600;font-size:13px;color:#1a1a1a}
+.mg{color:#166534}.mm{color:var(--muted)}.mb{color:var(--muted)}.mn{color:var(--subtle)}
+.albl{font-size:10px;color:var(--subtle);margin-left:3px}
+.chip{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.cw{background:var(--h5);color:#fff}
+.cm{background:var(--h3);color:#fff}
+.cg{background:var(--h1);color:var(--indigo)}
+.eic{display:inline-block;font-size:9px;color:var(--subtle);transition:transform .2s}
+.open .eic{transform:rotate(90deg)}
+
+/* drawer */
+.drow{display:none}
+.drow.open{display:table-row}
+.dtd{padding:0!important;border-bottom:2px solid var(--indigo-l)!important}
+.dbody{display:block;width:100%;background:#fafaf8;padding:20px 24px}
+.dsec{display:block;width:100%;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.dsec:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.dstl{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--subtle);margin-bottom:10px}
+.brow{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f0efed;font-size:12px}
+.brow:last-child{border-bottom:none}
+.bdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.bnm{flex:1;font-weight:500}
+.bpos{font-size:11px;color:var(--muted)}
+.yb{font-size:9px;font-weight:700;color:var(--indigo);background:var(--indigo-l);padding:1px 5px;border-radius:4px;margin-left:5px}
+.twrap{display:flex;flex-wrap:wrap;gap:5px}
+.tchip{background:var(--white);border:1px solid var(--border);border-radius:5px;padding:3px 9px;font-size:11px;color:var(--muted)}
+.ptabs{display:flex;gap:4px;margin-bottom:10px}
+.ptab{padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:var(--white);font-size:11px;color:var(--muted);cursor:pointer;font-family:inherit}
+.ptab.active{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+.rbox{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-size:12px;line-height:1.7;max-height:110px;overflow-y:auto}
+.bm{color:var(--indigo);font-weight:600}
+.co{color:#b45309;font-weight:500}
+.crow{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f0efed;font-size:11px}
+.crow:last-child{border-bottom:none}
+.ctp{font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;flex-shrink:0}
+.ct-g2{background:#fef3c7;color:#92400e}
+.ct-rd{background:#fee2e2;color:#991b1b}
+.ct-ed{background:#eff6ff;color:#1e40af}
+.ct-ow{background:#f0fdf4;color:#166534}
+.curl{color:var(--indigo);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── CITATIONS ── */
+.sr{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.sr:last-child{margin-bottom:0}
+.slbl{width:148px;flex-shrink:0;font-size:12px;font-weight:500}
+.sfrq{width:80px;flex-shrink:0;font-size:11px;color:var(--muted)}
+.sbw{flex:1;height:24px;border-radius:5px;overflow:hidden;display:flex;background:#f1f5f9}
+.ss{height:100%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600}
+.s-you{background:#3730a3;color:#fff}
+.s-cb{background:#818cf8;color:#fff}
+.s-ca{background:#c7d2fe;color:var(--slate)}
+.s-ot{background:#e0e7ff;color:var(--slate)}
+.sleg{display:flex;gap:16px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
+.sl{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
+.ssw{width:10px;height:10px;border-radius:2px}
+.stag{display:inline-block;padding:2px 8px;border-radius:5px;font-size:10px;font-weight:600}
+.st-g2{background:#fef3c7;color:#92400e}
+.st-alt{background:#fce7f3;color:#9d174d}
+.st-rd{background:#fee2e2;color:#991b1b}
+.st-ed{background:#eff6ff;color:#1e40af}
+.st-own{background:#f0fdf4;color:#166534}
+.freq{font-weight:600;font-size:12px}
+.fh{color:#166534}.fm{color:var(--muted)}.fl{color:var(--subtle)}
+.cpy{font-size:12px;color:#b91c1c;font-weight:500}
+.cpn{font-size:12px;color:var(--subtle)}
+/* brand footprint */
+.brand-main-row{border-bottom:1px solid #f5f4f1;cursor:pointer}
+.brand-main-row:hover{background:#faf9f7}
+.brand-main-row.open{background:#faf9f7}
+.brand-sub-row{display:none;background:#fafaf8}
+.brand-sub-row.open{display:table-row}
+.brand-sub-row td{padding:8px 14px 8px 48px!important;border-bottom:1px solid #f5f4f1;font-size:12px}
+.brand-you-badge{font-size:9px;font-weight:700;color:var(--indigo);background:var(--indigo-l);padding:1px 6px;border-radius:4px;margin-left:6px}
+.bft-bar{display:flex;gap:4px;align-items:center}
+.bft-seg{height:8px;border-radius:2px}
+
+/* ── ADD PROMPT MODAL ── */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:100;display:flex;align-items:center;justify-content:center}
+.ov.hidden{display:none}
+.modal{background:var(--white);border-radius:14px;width:680px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.15);overflow:hidden}
+.mhdr{padding:18px 22px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0}
+.mtitle{font-size:15px;font-weight:700}
+.msub{font-size:12px;color:var(--muted);margin-top:2px}
+.mclose{background:none;border:none;font-size:20px;color:var(--subtle);cursor:pointer;line-height:1}
+.mclose:hover{color:var(--text)}
+.mbody{flex:1;display:flex;overflow:hidden}
+
+/* modal left: input */
+.minput-zone{flex:1;padding:18px 20px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:12px}
+.minput{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:10px 14px;font-size:13px;font-family:inherit;outline:none;resize:none;line-height:1.5}
+.minput:focus{border-color:var(--indigo)}
+.minput::placeholder{color:#ccc}
+.madd-btn{align-self:flex-end;background:var(--indigo);color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+.madd-btn:disabled{background:#e5e7eb;color:#aaa;cursor:not-allowed}
+.madd-btn:not(:disabled):hover{background:#4338ca}
+.mwarn{font-size:11px;color:#d97706;display:none}
+.mwarn.show{display:block}
+
+/* autocomplete */
+.ac{position:relative}
+.ac-drop{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--white);border:1px solid var(--border);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.1);z-index:50;overflow:hidden;display:none}
+.ac-drop.open{display:block}
+.ac-item{padding:10px 14px;cursor:pointer;font-size:12px;color:var(--text);line-height:1.4;border-bottom:1px solid #f5f5f5}
+.ac-item:last-child{border-bottom:none}
+.ac-item:hover,.ac-item.hi{background:var(--indigo-l);color:var(--indigo)}
+.ac-item b{font-weight:700}
+
+/* modal right: queue */
+.mqueue{width:280px;flex-shrink:0;display:flex;flex-direction:column;overflow:hidden}
+.mqhdr{padding:14px 16px 10px;border-bottom:1px solid var(--border);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--subtle);flex-shrink:0}
+.mqlist{flex:1;overflow-y:auto;padding:10px 14px}
+.qi{display:flex;align-items:flex-start;gap:8px;padding:8px 8px;border-radius:8px;margin-bottom:6px;border:1px solid var(--border);background:var(--white);position:relative}
+.qi.suggested{background:#fafafe;border-style:dashed;border-color:#ddd6fe}
+.qi-txt{flex:1;font-size:12px;color:var(--text);line-height:1.5}
+.qi-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.qi-classifying{font-size:10px;color:var(--subtle);font-style:italic}
+.qi-rm{background:none;border:none;color:#ddd;cursor:pointer;font-size:16px;line-height:1;flex-shrink:0;padding:0}
+.qi-rm:hover{color:#ef4444}
+.qi-slbl{font-size:9px;color:#9e94d4;font-style:italic;margin-top:2px;display:block}
+
+.mfooter{padding:12px 18px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.mfcount{font-size:11px;color:var(--muted)}
+.mfcount span{color:var(--indigo);font-weight:600}
+.msave{background:var(--indigo);color:#fff;border:none;border-radius:20px;padding:7px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.msave:disabled{background:#e5e7eb;color:#aaa;cursor:not-allowed}
+.msave:not(:disabled):hover{background:#4338ca}
+
+/* success */
+.msuccess{display:none;flex-direction:column;align-items:center;justify-content:center;padding:52px 24px;text-align:center}
+.msuccess.show{display:flex}
+.ms-icon{font-size:32px;margin-bottom:10px}
+.ms-title{font-size:15px;font-weight:700;margin-bottom:4px}
+.ms-sub{font-size:12px;color:var(--muted)}
+.ms-pill{display:inline-block;background:var(--indigo-l);color:var(--indigo);font-weight:700;padding:3px 14px;border-radius:20px;font-size:12px;margin-top:10px}
+
+/* tooltip */
+.tip{position:fixed;background:#1e293b;color:#fff;border-radius:8px;padding:10px 14px;font-size:11px;line-height:1.6;pointer-events:none;z-index:1000;min-width:180px;display:none;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.tip.visible{display:block}
+.ttt{font-weight:700;margin-bottom:4px;font-size:12px}
+.ttr{display:flex;justify-content:space-between;gap:12px;color:#94a3b8}
+.ttr span:last-child{color:#fff;font-weight:500}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ═══ SIDEBAR ═══ -->
+<div class="sidebar">
+  <div class="logo">Strive<span>labs</span></div>
+  <div style="padding:4px 0">
+    <div class="nav-lbl">Workspace</div>
+    <div class="ni">⚡ Workforce</div>
+    <div class="ni">📋 Campaigns</div>
+  </div>
+  <div style="padding:4px 0">
+    <div class="nav-lbl">Analytics</div>
+    <div class="ni active" id="ni-overview" onclick="nav('overview')">🏠 Overview</div>
+    <div class="ni" id="ni-prompts"   onclick="nav('prompts')">🔍 Prompts</div>
+    <div class="ni" id="ni-citations" onclick="nav('citations')">🔗 Citations</div>
+    <div class="ni" id="ni-seo"       onclick="nav('seo')">⚖️ SEO × AEO</div>
+  </div>
+</div>
+
+<!-- ═══ PAGE: OVERVIEW ═══ -->
+<div class="page active" id="page-overview">
+  <div class="ph">
+    <div><div class="pt">Overview</div><div class="ps">Your AI answer visibility at a glance</div></div>
+    <button class="btn-outline" onclick="exportData()">↓ Export data</button>
+  </div>
+
+  <div class="kpi-strip" style="grid-template-columns:repeat(3,1fr)">
+    <div class="kpi">
+      <div class="kpi-lbl">AI Visibility</div>
+      <div class="kpi-val">21%</div>
+      <div class="kpi-d up">↑ 3pp vs last week</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-lbl">Prompts tracked</div>
+      <div class="kpi-val">16</div>
+      <div class="kpi-d nt">across 5 intent types</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-lbl">Topics identified</div>
+      <div class="kpi-val">6</div>
+      <div class="kpi-d nt">auto-classified</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="clbl">AI visibility ranking — consideration prompts</div>
+    <div class="lb-row">
+      <div class="lb-rank">#1</div><div class="lb-name">Competitor B</div>
+      <div class="lb-bw"><div class="lb-bar" style="width:35%;background:#c7d2fe;color:var(--slate)">35%</div></div>
+      <div class="lb-pct">35%</div>
+    </div>
+    <div class="lb-row">
+      <div class="lb-rank">#2</div><div class="lb-name">Competitor A</div>
+      <div class="lb-bw"><div class="lb-bar" style="width:28%;background:#c7d2fe;color:var(--slate)">28%</div></div>
+      <div class="lb-pct">28%</div>
+    </div>
+    <div class="lb-row">
+      <div class="lb-rank" style="color:var(--indigo)">#3</div><div class="lb-name lb-you">You</div>
+      <div class="lb-bw"><div class="lb-bar" style="width:21%;background:#4F46E5">21%</div></div>
+      <div class="lb-pct" style="color:var(--indigo)">21%</div>
+    </div>
+    <div class="lb-row">
+      <div class="lb-rank">#4</div><div class="lb-name">Competitor C</div>
+      <div class="lb-bw"><div class="lb-bar" style="width:16%;background:#e0e7ff;color:var(--slate)">16%</div></div>
+      <div class="lb-pct">16%</div>
+    </div>
+  </div>
+
+  <!-- Chart 1: Competitive visibility -->
+  <div class="card">
+    <div class="chart-hdr">
+      <div class="clbl" style="margin-bottom:0">Visibility over time · you vs competitors</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="position:relative">
+          <button class="btn-outline" style="font-size:11px;padding:4px 10px" onclick="toggleCompDrop()">Compare with <span id="compCount">none</span> ▾</button>
+          <div id="compDrop" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:var(--white);border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.1);z-index:50;min-width:160px;padding:6px 0">
+            <label style="display:flex;align-items:center;gap:8px;padding:7px 14px;cursor:pointer;font-size:12px"><input type="checkbox" value="compa" onchange="updateCompChart()"> Competitor A</label>
+            <label style="display:flex;align-items:center;gap:8px;padding:7px 14px;cursor:pointer;font-size:12px"><input type="checkbox" value="compb" onchange="updateCompChart()"> Competitor B</label>
+            <label style="display:flex;align-items:center;gap:8px;padding:7px 14px;cursor:pointer;font-size:12px"><input type="checkbox" value="compc" onchange="updateCompChart()"> Competitor C</label>
+          </div>
+        </div>
+        <div style="display:flex;background:#f1f5f9;border-radius:6px;padding:2px">
+          <button id="c1avg" class="toggle-btn active" onclick="setC1Mode('avg')">4w avg</button>
+          <button id="c1wk"  class="toggle-btn"        onclick="setC1Mode('weekly')">Weekly</button>
+        </div>
+      </div>
+    </div>
+    <div class="chart-wrap"><canvas id="chart1"></canvas></div>
+    <div class="cleg" id="c1leg">
+      <div class="cl"><div class="cs" style="background:#3730a3"></div> You</div>
+    </div>
+  </div>
+
+  <!-- Chart 2: Platform breakdown -->
+  <div class="card">
+    <div class="chart-hdr">
+      <div class="clbl" style="margin-bottom:0">Your visibility by platform · 8 weeks</div>
+      <div style="display:flex;background:#f1f5f9;border-radius:6px;padding:2px">
+        <button id="c2avg" class="toggle-btn active" onclick="setC2Mode('avg')">4w avg</button>
+        <button id="c2wk"  class="toggle-btn"        onclick="setC2Mode('weekly')">Weekly</button>
+      </div>
+    </div>
+    <div class="chart-wrap"><canvas id="chart2"></canvas></div>
+    <div class="cleg">
+      <div class="cl"><div class="cs" style="background:#818cf8"></div> ChatGPT</div>
+      <div class="cl"><div class="cs" style="background:#a5b4fc"></div> Perplexity</div>
+      <div class="cl"><div class="cs" style="background:#c7d2fe"></div> Gemini</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAGE: PROMPTS ═══ -->
+<div class="page" id="page-prompts">
+  <div class="ph">
+    <div><div class="pt">Prompts</div><div class="ps">Track how your brand appears in AI-generated answers</div></div>
+    <button class="btn-primary" onclick="openModal()">+ Add prompt</button>
+  </div>
+
+  <div class="card">
+    <div class="clbl">Prompt coverage by intent</div>
+    <div class="intent-chart">
+      <div class="irow"><div class="iname">Alternatives &amp; comparisons</div><div class="bwrap"><div class="seg w" style="width:25%">1</div><div class="seg m" style="width:25%">1</div><div class="seg g" style="width:50%">2</div></div><div class="icnt">4 prompts</div></div>
+      <div class="irow"><div class="iname">Best in category</div><div class="bwrap"><div class="seg w" style="width:60%">3</div><div class="seg m" style="width:20%">1</div><div class="seg g" style="width:20%">1</div></div><div class="icnt">5 prompts</div></div>
+      <div class="irow"><div class="iname">Works with...</div><div class="bwrap"><div class="seg m" style="width:33%">1</div><div class="seg g" style="width:67%">2</div></div><div class="icnt">3 prompts</div></div>
+      <div class="irow"><div class="iname">Solve a problem</div><div class="bwrap"><div class="seg w" style="width:50%">2</div><div class="seg m" style="width:50%">2</div></div><div class="icnt">4 prompts</div></div>
+      <div class="irow"><div class="iname">Is it worth it?</div><div class="bwrap"><div class="seg e">No prompts tracked yet</div></div><div class="icnt">0 prompts</div></div>
+    </div>
+    <div class="pleg">
+      <div class="pl"><div class="psw" style="background:var(--h5)"></div> Winning</div>
+      <div class="pl"><div class="psw" style="background:var(--h3)"></div> Watch</div>
+      <div class="pl"><div class="psw" style="background:var(--h1);border:1px solid #c7d2fe"></div> Gap</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="hm-hdr">
+      <div class="clbl" style="margin-bottom:0">Topic × intent coverage</div>
+      <span id="hmToggleIcon" style="font-size:11px;color:var(--subtle);cursor:pointer;transform:rotate(90deg);display:inline-block;transition:transform .2s" onclick="toggleHM()">▶</span>
+    </div>
+    <div id="hmBody">
+      <table class="hm-tbl" id="hmGrid"></table>
+      <div class="hm-leg">
+        <span class="hml">Weaker</span>
+        <div class="hmsc">
+          <div class="hmsw" style="background:#e0e7ff"></div>
+          <div class="hmsw" style="background:#c7d2fe"></div>
+          <div class="hmsw" style="background:#818cf8"></div>
+          <div class="hmsw" style="background:#4F46E5"></div>
+          <div class="hmsw" style="background:#3730a3"></div>
+        </div>
+        <span class="hml">Stronger</span>
+        <span style="font-size:10px;color:var(--subtle);margin-left:10px">· Dashed = not tracked</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tcard">
+    <div class="tbar">
+      <div class="tlbl">All prompts · sorted by signal</div>
+      <div class="tfs">
+        <button class="fb active" onclick="ft(this,'all')">All</button>
+        <button class="fb" onclick="ft(this,'gap')">Gap</button>
+        <button class="fb" onclick="ft(this,'watch')">Watch</button>
+        <button class="fb" onclick="ft(this,'winning')">Winning</button>
+      </div>
+    </div>
+    <table><thead><tr><th style="width:32px"></th><th>Prompt</th><th>Visibility</th><th>Avg position</th><th>Sentiment</th><th>Signal</th></tr></thead>
+    <tbody id="tb"></tbody></table>
+  </div>
+</div>
+
+<!-- ═══ PAGE: CITATIONS ═══ -->
+<div class="page" id="page-citations">
+  <div class="ph">
+    <div><div class="pt">Citations</div><div class="ps">Which sources drive LLM responses — and how you compare</div></div>
+  </div>
+
+  <div class="card">
+    <div class="clbl">Citation share by source type</div>
+    <div class="sr"><div class="slbl">G2 / Capterra</div><div class="sfrq">287 responses</div><div class="sbw"><div class="ss s-you" style="width:18%">18%</div><div class="ss s-cb" style="width:44%">Comp B · 44%</div><div class="ss s-ca" style="width:22%">Comp A · 22%</div><div class="ss s-ot" style="width:16%">16%</div></div></div>
+    <div class="sr"><div class="slbl">Alternative directories</div><div class="sfrq">152 responses</div><div class="sbw"><div class="ss s-you" style="width:8%">8%</div><div class="ss s-cb" style="width:28%">28%</div><div class="ss s-ca" style="width:52%">Comp A · 52%</div><div class="ss s-ot" style="width:12%">12%</div></div></div>
+    <div class="sr"><div class="slbl">Reddit / community</div><div class="sfrq">118 responses</div><div class="sbw"><div class="ss s-you" style="width:24%">24%</div><div class="ss s-cb" style="width:18%">18%</div><div class="ss s-ca" style="width:38%">Comp A · 38%</div><div class="ss s-ot" style="width:20%">20%</div></div></div>
+    <div class="sr"><div class="slbl">Editorial blogs</div><div class="sfrq">84 responses</div><div class="sbw"><div class="ss s-you" style="width:31%">31%</div><div class="ss s-cb" style="width:29%">29%</div><div class="ss s-ca" style="width:24%">24%</div><div class="ss s-ot" style="width:16%">16%</div></div></div>
+    <div class="sr"><div class="slbl">Owned content</div><div class="sfrq">62 responses</div><div class="sbw"><div class="ss s-you" style="width:14%">14%</div><div class="ss s-cb" style="width:31%">31%</div><div class="ss s-ca" style="width:22%">22%</div><div class="ss s-ot" style="width:33%">33%</div></div></div>
+    <div class="sleg">
+      <div class="sl"><div class="ssw" style="background:#3730a3"></div> You</div>
+      <div class="sl"><div class="ssw" style="background:#818cf8"></div> Competitor B</div>
+      <div class="sl"><div class="ssw" style="background:#c7d2fe"></div> Competitor A</div>
+      <div class="sl"><div class="ssw" style="background:#e0e7ff;border:1px solid #c7d2fe"></div> Others</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div class="clbl" style="margin-bottom:0">Citation presence · source type × intent</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:11px;color:var(--subtle)">Viewing</span>
+        <select class="fsel" id="hmCSel" onchange="redrawCitHM()">
+          <option value="you">Your presence</option>
+          <option value="compa">Competitor A</option>
+          <option value="compb">Competitor B</option>
+        </select>
+      </div>
+    </div>
+    <table class="hm-tbl" id="hmCGrid"></table>
+    <div class="hm-leg">
+      <span class="hml">No presence</span>
+      <div class="hmsc"><div class="hmsw" style="background:#e0e7ff"></div><div class="hmsw" style="background:#c7d2fe"></div><div class="hmsw" style="background:#818cf8"></div><div class="hmsw" style="background:#4F46E5"></div><div class="hmsw" style="background:#3730a3"></div></div>
+      <span class="hml">Strong presence</span>
+      <span style="font-size:10px;color:var(--subtle);margin-left:10px">· Dashed = no citations found</span>
+    </div>
+  </div>
+
+  <div class="tcard">
+    <div class="tbar">
+      <div class="tlbl">All citation sources · sorted by frequency</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span style="font-size:11px;color:var(--subtle)">Intent</span>
+        <select class="fsel" id="fCI" onchange="filterCit()">
+          <option value="all">All intents</option>
+          <option value="alt">Alternatives</option>
+          <option value="best">Best in category</option>
+          <option value="wrk">Works with</option>
+          <option value="prb">Solve a problem</option>
+          <option value="wrt">Is it worth it?</option>
+        </select>
+        <span style="font-size:11px;color:var(--subtle)">Source</span>
+        <select class="fsel" id="fCS" onchange="filterCit()">
+          <option value="all">All sources</option>
+          <option value="g2">G2 / Capterra</option>
+          <option value="alt">Alt directories</option>
+          <option value="rd">Reddit</option>
+          <option value="ed">Editorial</option>
+          <option value="own">Owned</option>
+        </select>
+      </div>
+    </div>
+    <table><thead><tr><th>Citation source</th><th>Source type</th><th>Frequency</th><th>Intent</th><th>Competitor present</th></tr></thead>
+    <tbody id="citB"></tbody></table>
+  </div>
+
+  <!-- Brand footprint table -->
+  <div class="tcard" style="margin-top:14px">
+    <div class="tbar">
+      <div class="tlbl">Citation footprint by brand</div>
+      <div style="font-size:11px;color:var(--subtle)">How many sources each brand appears in — and which ones</div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:32px"></th>
+          <th>Brand</th>
+          <th>Unique sources</th>
+          <th>Total responses</th>
+          <th>Strongest source type</th>
+        </tr>
+      </thead>
+      <tbody id="brandB"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ PAGE: SEO × AEO ═══ -->
+<div class="page" id="page-seo">
+  <div class="ph"><div><div class="pt">SEO × AEO</div><div class="ps">Connect retrieval strength to AI answer presence</div></div></div>
+  <div class="card" style="text-align:center;padding:60px 20px">
+    <div style="font-size:32px;margin-bottom:12px">⚖️</div>
+    <div style="font-size:16px;font-weight:600;color:var(--slate);margin-bottom:8px">Coming next phase</div>
+    <div style="font-size:13px;color:var(--muted);max-width:400px;margin:0 auto">The SEO × AEO quadrant screen — connecting Google ranking data to LLM visibility — is designed and ready to build. It requires the GSC embedding infrastructure to be validated first.</div>
+  </div>
+</div>
+
+</div><!-- /shell -->
+
+<!-- ═══ ADD PROMPT MODAL ═══ -->
+<div class="ov hidden" id="modalOv" onclick="handleOvClick(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="mhdr">
+      <div><div class="mtitle">Track prompts</div><div class="msub" id="msub">12 preloaded from your setup · add your own or remove what doesn't fit</div></div>
+      <button class="mclose" onclick="closeModal()">×</button>
+    </div>
+    <div class="mbody" id="mbody">
+      <!-- Left: input -->
+      <div class="minput-zone">
+        <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--subtle)">Type a prompt</div>
+        <div class="ac">
+          <textarea class="minput" id="minput" rows="2" placeholder="e.g. What are the best alternatives to HubSpot for B2B teams?" oninput="onMInput()" onkeydown="onMKey(event)"></textarea>
+          <div class="ac-drop" id="acdrop"></div>
+        </div>
+        <div class="mwarn" id="mwarn">⚠ Doesn't look like a natural language question. Try starting with What, How, Is, Does, Which…</div>
+        <button class="madd-btn" id="maddBtn" disabled onclick="addToQueue()">Add to queue</button>
+      </div>
+      <!-- Right: queue -->
+      <div class="mqueue">
+        <div class="mqhdr" id="mqhdr">Queue</div>
+        <div class="mqlist" id="mqlist"></div>
+      </div>
+    </div>
+    <div class="mfooter" id="mfooter">
+      <div class="mfcount" id="mfcount"></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-outline" onclick="closeModal()">Cancel</button>
+        <button class="msave" id="msave" disabled onclick="saveAll()">Save all</button>
+      </div>
+    </div>
+    <div class="msuccess" id="msuccess">
+      <div class="ms-icon">✓</div>
+      <div class="ms-title">Prompts added to tracking</div>
+      <div class="ms-sub">LLM visibility sampling begins on the next sync</div>
+      <div class="ms-pill" id="mspill"></div>
+    </div>
+  </div>
+</div>
+
+<div class="tip" id="tip"></div>
+
+<script>
+/* ══════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════ */
+let chartInited = false;
+function nav(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.getElementById('ni-'+id).classList.add('active');
+  if(id==='overview' && !chartInited){ initChart(); chartInited=true; }
+}
+
+function exportData(){ alert('Export data — CSV download would trigger here'); }
+
+/* ══════════════════════════════════════════
+   OVERVIEW: TWO CHARTS
+══════════════════════════════════════════ */
+const WEEKS=['W1','W2','W3','W4','W5','W6','W7','W8'];
+const TREND={
+  you_avg:  [14,15,16,17,18,18,20,21],
+  you_wk:   [12,16,14,18,17,19,18,24],
+  compa_avg:[22,22,23,24,24,25,25,26],
+  compa_wk: [21,23,22,25,24,26,24,28],
+  compb_avg:[28,29,30,31,32,33,34,35],
+  compb_wk: [27,30,29,32,31,34,33,37],
+  compc_avg:[10,11,11,12,13,13,14,16],
+  compc_wk: [9,12,10,13,12,14,13,18],
+  cgpt_avg: [12,14,15,16,17,17,19,20],
+  cgpt_wk:  [10,15,13,17,16,18,17,23],
+  pplx_avg: [8,9,10,11,12,13,14,15],
+  pplx_wk:  [7,10,9,12,11,13,12,17],
+  gem_avg:  [6,7,8,9,10,11,12,13],
+  gem_wk:   [5,8,7,10,9,12,10,15],
+};
+const COMP_COLORS={compa:'#f59e0b',compb:'#10b981',compc:'#ef4444'};
+const COMP_NAMES={compa:'Competitor A',compb:'Competitor B',compc:'Competitor C'};
+
+let chart1,chart2,c1mode='avg',c2mode='avg';
+let compDropOpen=false;
+
+const CHART_OPTS=(ymax)=>({
+  responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.raw}%`}}},
+  scales:{
+    y:{min:0,max:ymax,ticks:{callback:v=>v+'%',font:{size:10}},grid:{color:'#f5f4f1'}},
+    x:{ticks:{font:{size:10}},grid:{display:false}}
+  }
+});
+
+function initChart(){
+  // Chart 1: competitive
+  const ctx1=document.getElementById('chart1').getContext('2d');
+  chart1=new Chart(ctx1,{type:'line',data:{labels:WEEKS,datasets:[{label:'You',data:TREND.you_avg,borderColor:'#3730a3',backgroundColor:'rgba(55,48,163,.08)',tension:.4,pointRadius:3,borderWidth:2.5,fill:true}]},options:CHART_OPTS(50)});
+
+  // Chart 2: platform
+  const ctx2=document.getElementById('chart2').getContext('2d');
+  chart2=new Chart(ctx2,{type:'line',data:{labels:WEEKS,datasets:[
+    {label:'ChatGPT',  data:TREND.cgpt_avg,borderColor:'#818cf8',backgroundColor:'transparent',tension:.4,pointRadius:3,borderWidth:2},
+    {label:'Perplexity',data:TREND.pplx_avg,borderColor:'#a5b4fc',backgroundColor:'transparent',tension:.4,pointRadius:3,borderWidth:2},
+    {label:'Gemini',   data:TREND.gem_avg, borderColor:'#c7d2fe',backgroundColor:'transparent',tension:.4,pointRadius:3,borderWidth:2},
+  ]},options:CHART_OPTS(35)});
+
+  updateC1Legend();
+}
+
+function setC1Mode(mode){
+  c1mode=mode;
+  document.getElementById('c1avg').classList.toggle('active',mode==='avg');
+  document.getElementById('c1wk').classList.toggle('active',mode==='weekly');
+  updateCompChart();
+}
+
+function setC2Mode(mode){
+  c2mode=mode;
+  document.getElementById('c2avg').classList.toggle('active',mode==='avg');
+  document.getElementById('c2wk').classList.toggle('active',mode==='weekly');
+  const sfx=mode==='avg'?'_avg':'_wk';
+  chart2.data.datasets[0].data=TREND['cgpt'+sfx];
+  chart2.data.datasets[1].data=TREND['pplx'+sfx];
+  chart2.data.datasets[2].data=TREND['gem'+sfx];
+  chart2.update();
+}
+
+function toggleCompDrop(){
+  compDropOpen=!compDropOpen;
+  document.getElementById('compDrop').style.display=compDropOpen?'block':'none';
+}
+document.addEventListener('click',e=>{
+  if(compDropOpen&&!e.target.closest('#compDrop')&&!e.target.closest('[onclick="toggleCompDrop()"]')){
+    compDropOpen=false; document.getElementById('compDrop').style.display='none';
+  }
+});
+
+function updateCompChart(){
+  if(!chart1) return;
+  const sfx=c1mode==='avg'?'_avg':'_wk';
+  const checked=[...document.querySelectorAll('#compDrop input:checked')].map(el=>el.value);
+  // rebuild datasets: you first, then selected comps
+  chart1.data.datasets=[{label:'You',data:TREND['you'+sfx],borderColor:'#3730a3',backgroundColor:'rgba(55,48,163,.08)',tension:.4,pointRadius:3,borderWidth:2.5,fill:true}];
+  checked.forEach(k=>{
+    chart1.data.datasets.push({label:COMP_NAMES[k],data:TREND[k+sfx],borderColor:COMP_COLORS[k],backgroundColor:'transparent',tension:.4,pointRadius:3,borderWidth:2});
+  });
+  chart1.update();
+  // update count label
+  document.getElementById('compCount').textContent=checked.length?checked.length+' selected':'none';
+  updateC1Legend();
+}
+
+function updateC1Legend(){
+  const leg=document.getElementById('c1leg');
+  const checked=[...document.querySelectorAll('#compDrop input:checked')].map(el=>el.value);
+  leg.innerHTML=`<div class="cl"><div class="cs" style="background:#3730a3"></div> You</div>`;
+  checked.forEach(k=>{leg.innerHTML+=`<div class="cl"><div class="cs" style="background:${COMP_COLORS[k]}"></div> ${COMP_NAMES[k]}</div>`;});
+}
+
+/* ══════════════════════════════════════════
+   PROMPTS: HEATMAP
+══════════════════════════════════════════ */
+const PTOPICS=['Campaign mgmt','AEO / AI visibility','Integrations','Content strategy','Analytics','Reddit engagement'];
+const PINTS=[{k:'alt',l:'Alternatives\n& comparisons'},{k:'best',l:'Best in\ncategory'},{k:'wrk',l:'Works\nwith...'},{k:'prb',l:'Solve a\nproblem'},{k:'wrt',l:'Is it\nworth it?'}];
+const PHM={'Campaign mgmt':{alt:4,best:3,wrk:1,prb:4,wrt:0},'AEO / AI visibility':{alt:1,best:5,wrk:0,prb:2,wrt:0},'Integrations':{alt:0,best:1,wrk:1,prb:0,wrt:0},'Content strategy':{alt:4,best:5,wrk:0,prb:2,wrt:1},'Analytics':{alt:1,best:1,wrk:0,prb:2,wrt:0},'Reddit engagement':{alt:2,best:2,wrk:0,prb:0,wrt:0}};
+const SHADES=['','#e0e7ff','#c7d2fe','#818cf8','#4F46E5','#3730a3'];
+const STR=['','Very weak','Weak','Contested','Strong','Very strong'];
+const tipEl=document.getElementById('tip');
+
+function buildPHeatmap(){
+  const tbl=document.getElementById('hmGrid'); tbl.innerHTML='';
+  const th=document.createElement('thead'),hr=document.createElement('tr');
+  const b=document.createElement('th'); b.className='rh'; hr.appendChild(b);
+  PINTS.forEach(i=>{const t=document.createElement('th');t.style.cssText='text-align:center;font-size:10px;color:var(--muted);padding:0 0 10px;white-space:pre-line;line-height:1.4;min-width:64px';t.textContent=i.l;hr.appendChild(t);});
+  th.appendChild(hr); tbl.appendChild(th);
+  const tb=document.createElement('tbody');
+  PTOPICS.forEach(topic=>{
+    const tr=document.createElement('tr');
+    const lbl=document.createElement('td'); lbl.className='rh'; lbl.textContent=topic; tr.appendChild(lbl);
+    PINTS.forEach(int=>{
+      const score=PHM[topic][int.k];
+      const td=document.createElement('td'); td.style.cssText='padding:0;vertical-align:middle;';
+      const cell=document.createElement('div');
+      if(score===0){cell.style.cssText='width:64px;height:34px;border-radius:4px;background:#f1f5f9;border:1.5px dashed #cbd5e1;display:flex;align-items:center;justify-content:center;';}
+      else{cell.style.cssText=`width:64px;height:34px;border-radius:4px;background:${SHADES[score]};`;}
+      cell.style.transition='transform .12s';
+      cell.addEventListener('mouseenter',e=>{
+        cell.style.transform='scale(1.1)';
+        const il=int.l.replace('\n',' ');
+        tipEl.innerHTML=`<div class="ttt">${topic} · ${il}</div>`+(score===0?'<div style="color:#94a3b8;font-size:11px">Not tracked yet</div>':`<div class="ttr"><span>Relative position</span><span>${STR[score]}</span></div>`);
+        tipEl.classList.add('visible'); moveTip(e);
+      });
+      cell.addEventListener('mousemove',moveTip);
+      cell.addEventListener('mouseleave',()=>{cell.style.transform='';tipEl.classList.remove('visible');});
+      td.appendChild(cell); tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  });
+  tbl.appendChild(tb);
+}
+
+function moveTip(e){let x=e.clientX+14,y=e.clientY-10;if(x+200>window.innerWidth)x=e.clientX-204;if(y+100>window.innerHeight)y=e.clientY-104;tipEl.style.left=x+'px';tipEl.style.top=y+'px';}
+
+function toggleHM(){
+  const b=document.getElementById('hmBody'),i=document.getElementById('hmToggleIcon');
+  const h=b.style.display==='none'; b.style.display=h?'':'none';
+  i.style.transform=h?'rotate(90deg)':'rotate(0deg)';
+}
+
+/* ══════════════════════════════════════════
+   PROMPTS: TABLE
+══════════════════════════════════════════ */
+const P=[
+  {id:1,sig:'gap',text:'Top [Competitor A] alternatives',intent:'alt',iLabel:'Alternatives &amp; comparisons',vis:'0%',vc:'mb',pos:'—',pc:'mn',sent:'—',sc:'mn',topics:['competitor comparison','alternatives','switching'],brands:[{n:'Competitor A',p:'#1.2',you:false,c:'#f59e0b'},{n:'Competitor C',p:'#2.4',you:false,c:'#8b5cf6'},{n:'You',p:'Not cited',you:true,c:'#4F46E5'}],cits:[{t:'G2',tc:'ct-g2',u:'g2.com/compare/competitor-a-vs-alternatives'},{t:'Reddit',tc:'ct-rd',u:'reddit.com/r/marketing/competitor-a-review'},{t:'Editorial',tc:'ct-ed',u:'techradar.com/best-marketing-automation'}],resp:{chatgpt:'When looking for alternatives to <span class="co">Competitor A</span>, most teams consider <span class="co">Competitor C</span>. These platforms offer similar campaign management with different pricing.',perplexity:'<span class="co">Competitor A</span> alternatives vary by use case. For enterprise, <span class="co">Competitor C</span> is recommended.',gemini:'Top alternatives to <span class="co">Competitor A</span> include <span class="co">Competitor C</span> depending on budget.'}},
+  {id:2,sig:'gap',text:'Does [Brand] integrate with HubSpot?',intent:'wrk',iLabel:'Works with...',vis:'4%',vc:'mb',pos:'#4.8',pc:'mm',sent:'Neutral',sc:'mm',topics:['hubspot','integrations','crm'],brands:[{n:'Competitor A',p:'#1.0',you:false,c:'#f59e0b'},{n:'You',p:'#4.8',you:true,c:'#4F46E5'}],cits:[{t:'Owned',tc:'ct-ow',u:'brand.com/integrations/hubspot'},{t:'G2',tc:'ct-g2',u:'g2.com/products/brand/integrations'}],resp:{chatgpt:'HubSpot integrates with many platforms. <span class="co">Competitor A</span> offers a native connector. <span class="bm">[Brand]</span> has a basic integration via API.',perplexity:'For HubSpot integrations, <span class="co">Competitor A</span> is most cited. <span class="bm">[Brand]</span> supports HubSpot through a third-party connector.',gemini:'Most enterprise tools offer native HubSpot integrations. <span class="bm">[Brand]</span> supports it but documentation is limited.'}},
+  {id:3,sig:'watch',text:'[Brand] vs [Competitor B] — which is better?',intent:'alt',iLabel:'Alternatives &amp; comparisons',vis:'6%',vc:'mm',pos:'#4.2',pc:'mm',sent:'Neutral',sc:'mm',topics:['competitor comparison','vs','campaign management'],brands:[{n:'Competitor B',p:'#1.6',you:false,c:'#8b5cf6'},{n:'You',p:'#4.2',you:true,c:'#4F46E5'}],cits:[{t:'G2',tc:'ct-g2',u:'g2.com/compare/brand-vs-competitor-b'},{t:'Reddit',tc:'ct-rd',u:'reddit.com/r/saas/brand-vs-competitor'}],resp:{chatgpt:'Comparing <span class="bm">[Brand]</span> and <span class="co">Competitor B</span>: <span class="co">Competitor B</span> suits larger teams. <span class="bm">[Brand]</span> is noted for AI-native approach.',perplexity:'<span class="co">Competitor B</span> has stronger recognition. <span class="bm">[Brand]</span> is growing in AEO.',gemini:'<span class="co">Competitor B</span> has a larger user base. <span class="bm">[Brand]</span> differentiates on AI-native intelligence.'}},
+  {id:4,sig:'watch',text:'How do I improve AI answer visibility for B2B SaaS?',intent:'prb',iLabel:'Solve a problem',vis:'11%',vc:'mm',pos:'#3.4',pc:'mm',sent:'Positive',sc:'mg',topics:['aeo','ai visibility','b2b saas'],brands:[{n:'Competitor A',p:'#2.1',you:false,c:'#f59e0b'},{n:'You',p:'#3.4',you:true,c:'#4F46E5'}],cits:[{t:'Owned',tc:'ct-ow',u:'brand.com/blog/aeo-guide'},{t:'Editorial',tc:'ct-ed',u:'searchengineland.com/aeo-2025'},{t:'Reddit',tc:'ct-rd',u:'reddit.com/r/seo/aeo-saas'}],resp:{chatgpt:'Improving AI visibility involves structuring content for LLM extraction. Tools like <span class="bm">[Brand]</span> and <span class="co">Competitor A</span> are emerging.',perplexity:'AEO for B2B SaaS differs from SEO. <span class="bm">[Brand]</span> offers prompt tracking for this use case.',gemini:'AI visibility depends on content structure. <span class="co">Competitor A</span> and <span class="bm">[Brand]</span> both address this.'}},
+  {id:5,sig:'winning',text:'Best alternative to [Competitor C]',intent:'alt',iLabel:'Alternatives &amp; comparisons',vis:'18%',vc:'mg',pos:'#1.8',pc:'mg',sent:'Positive',sc:'mg',topics:['competitor comparison','alternatives'],brands:[{n:'You',p:'#1.8',you:true,c:'#4F46E5'},{n:'Competitor C',p:'#3.1',you:false,c:'#10b981'}],cits:[{t:'Owned',tc:'ct-ow',u:'brand.com/vs/competitor-c'},{t:'G2',tc:'ct-g2',u:'g2.com/compare/brand-vs-competitor-c'}],resp:{chatgpt:'The best alternative to <span class="co">Competitor C</span> for AI-native campaign intelligence is <span class="bm">[Brand]</span>, offering stronger AEO monitoring.',perplexity:'<span class="bm">[Brand]</span> is a strong alternative to <span class="co">Competitor C</span> for teams tracking AI visibility.',gemini:'For those moving from <span class="co">Competitor C</span>, <span class="bm">[Brand]</span> offers a compelling AI-native alternative.'}},
+  {id:6,sig:'winning',text:'Best marketing automation tools for B2B startups',intent:'best',iLabel:'Best in category',vis:'22%',vc:'mg',pos:'#2.1',pc:'mg',sent:'Positive',sc:'mg',topics:['marketing automation','b2b','startups'],brands:[{n:'Competitor A',p:'#1.4',you:false,c:'#f59e0b'},{n:'You',p:'#2.1',you:true,c:'#4F46E5'},{n:'Competitor B',p:'#3.2',you:false,c:'#8b5cf6'}],cits:[{t:'Owned',tc:'ct-ow',u:'brand.com/blog/b2b-marketing'},{t:'G2',tc:'ct-g2',u:'g2.com/categories/marketing-automation'},{t:'Editorial',tc:'ct-ed',u:'techcrunch.com/best-martech-2025'}],resp:{chatgpt:'Top tools for B2B startups: <span class="co">Competitor A</span>, <span class="bm">[Brand]</span>, <span class="co">Competitor B</span>. <span class="bm">[Brand]</span> leads on AI-native campaign intelligence.',perplexity:'<span class="co">Competitor A</span> leads on features; <span class="bm">[Brand]</span> gains traction for AEO-focused teams.',gemini:'Top picks include <span class="co">Competitor A</span> and <span class="bm">[Brand]</span>, the latter with strong AEO capabilities.'}},
+];
+const ORD={gap:0,watch:1,winning:2};
+const IC={alt:'it-alt',best:'it-best',wrk:'it-wrk',prb:'it-prb',wrt:'it-wrt'};
+const CC={winning:'cw',watch:'cm',gap:'cg'};
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+
+function build(f){
+  const tb=document.getElementById('tb'); tb.innerHTML='';
+  P.filter(d=>f==='all'||d.sig===f).sort((a,b)=>ORD[a.sig]-ORD[b.sig]).forEach(d=>{
+    const tr=document.createElement('tr'); tr.className='dr'; tr.id='r'+d.id; tr.onclick=()=>toggle(d.id);
+    tr.innerHTML=`<td><span class="eic" id="ei${d.id}">▶</span></td><td><div class="ptxt">${d.text}</div><span class="itag ${IC[d.intent]}">${d.iLabel}</span></td><td><span class="met ${d.vc}">${d.vis}</span><span class="albl">4w avg</span></td><td><span class="met ${d.pc}">${d.pos}</span></td><td><span class="met ${d.sc}">${d.sent}</span></td><td><span class="chip ${CC[d.sig]}">${cap(d.sig)}</span></td>`;
+    document.getElementById('tb').appendChild(tr);
+    const dr=document.createElement('tr'); dr.className='drow'; dr.id='dr'+d.id;
+    const brands=d.brands.map(b=>`<div class="brow"><div class="bdot" style="background:${b.c}"></div><div class="bnm">${b.n}${b.you?'<span class="yb">YOU</span>':''}</div><div class="bpos">${b.p}</div></div>`).join('');
+    const topics=d.topics.map(t=>`<span class="tchip">${t}</span>`).join('');
+    const cits=d.cits.map(c=>`<div class="crow"><span class="ctp ${c.tc}">${c.t}</span><span class="curl">${c.u}</span></div>`).join('');
+    dr.innerHTML=`<td colspan="6" class="dtd"><div class="dbody"><div class="dsec"><span class="dstl">Brands mentioned</span>${brands}</div><div class="dsec"><span class="dstl">Auto-tagged topics</span><div class="twrap">${topics}</div></div><div class="dsec"><span class="dstl">LLM response</span><div class="ptabs" id="pt${d.id}"><button class="ptab active" onclick="sw(event,${d.id},'chatgpt')">ChatGPT</button><button class="ptab" onclick="sw(event,${d.id},'perplexity')">Perplexity</button><button class="ptab" onclick="sw(event,${d.id},'gemini')">Gemini</button></div><div class="rbox" id="rb${d.id}">${d.resp.chatgpt}</div></div><div class="dsec"><span class="dstl">Citations used</span>${cits}</div></div></td>`;
+    document.getElementById('tb').appendChild(dr);
+  });
+}
+function toggle(id){
+  const o=document.getElementById('dr'+id).classList.contains('open');
+  document.querySelectorAll('.drow').forEach(r=>r.classList.remove('open'));
+  document.querySelectorAll('.dr').forEach(r=>r.classList.remove('open'));
+  document.querySelectorAll('.eic').forEach(i=>i.style.transform='');
+  if(!o){document.getElementById('dr'+id).classList.add('open');document.getElementById('r'+id).classList.add('open');document.getElementById('ei'+id).style.transform='rotate(90deg)';}
+}
+function sw(e,id,plat){e.stopPropagation();const d=P.find(x=>x.id===id);document.getElementById('rb'+id).innerHTML=d.resp[plat];document.querySelectorAll('#pt'+id+' .ptab').forEach(t=>t.classList.remove('active'));e.target.classList.add('active');}
+function ft(btn,f){document.querySelectorAll('.fb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');build(f);}
+
+/* ══════════════════════════════════════════
+   CITATIONS: HEATMAP
+══════════════════════════════════════════ */
+const CSRCS=['G2 / Capterra','Alt directories','Reddit','Editorial','Owned content'];
+const CINTS=[{k:'alt',l:'Alternatives\n& comparisons'},{k:'best',l:'Best in\ncategory'},{k:'wrk',l:'Works\nwith...'},{k:'prb',l:'Solve a\nproblem'},{k:'wrt',l:'Is it\nworth it?'}];
+const CHM={
+  you:{'G2 / Capterra':{alt:1,best:3,wrk:4,prb:1,wrt:3},'Alt directories':{alt:1,best:1,wrk:2,prb:1,wrt:0},'Reddit':{alt:1,best:2,wrk:2,prb:1,wrt:0},'Editorial':{alt:1,best:3,wrk:4,prb:2,wrt:1},'Owned content':{alt:1,best:3,wrk:4,prb:2,wrt:3}},
+  compa:{'G2 / Capterra':{alt:4,best:5,wrk:3,prb:2,wrt:4},'Alt directories':{alt:5,best:3,wrk:1,prb:1,wrt:0},'Reddit':{alt:3,best:3,wrk:1,prb:3,wrt:1},'Editorial':{alt:2,best:4,wrk:2,prb:3,wrt:2},'Owned content':{alt:2,best:4,wrk:3,prb:3,wrt:2}},
+  compb:{'G2 / Capterra':{alt:5,best:4,wrk:2,prb:1,wrt:5},'Alt directories':{alt:3,best:2,wrk:0,prb:1,wrt:1},'Reddit':{alt:2,best:1,wrk:0,prb:2,wrt:2},'Editorial':{alt:3,best:3,wrk:1,prb:2,wrt:1},'Owned content':{alt:3,best:3,wrk:2,prb:2,wrt:2}},
+};
+const CSTR=['','Very low','Low','Moderate','Strong','Very strong'];
+
+function buildCitHM(who){
+  const tbl=document.getElementById('hmCGrid'); tbl.innerHTML='';
+  const data=CHM[who];
+  const th=document.createElement('thead'),hr=document.createElement('tr');
+  const b=document.createElement('th'); b.className='rh'; hr.appendChild(b);
+  CINTS.forEach(i=>{const t=document.createElement('th');t.style.cssText='text-align:center;font-size:10px;color:var(--muted);padding:0 0 10px;white-space:pre-line;line-height:1.4;min-width:72px';t.textContent=i.l;hr.appendChild(t);});
+  th.appendChild(hr); tbl.appendChild(th);
+  const tb=document.createElement('tbody');
+  CSRCS.forEach(src=>{
+    const tr=document.createElement('tr');
+    const lbl=document.createElement('td'); lbl.className='rh'; lbl.textContent=src; tr.appendChild(lbl);
+    CINTS.forEach(int=>{
+      const score=data[src][int.k];
+      const td=document.createElement('td'); td.style.cssText='padding:0 0 4px;vertical-align:middle;';
+      const cell=document.createElement('div');
+      if(score===0){cell.style.cssText='width:72px;height:34px;border-radius:4px;background:#f1f5f9;border:1.5px dashed #cbd5e1;display:flex;align-items:center;justify-content:center;';}
+      else{cell.style.cssText=`width:72px;height:34px;border-radius:4px;background:${SHADES[score]};`;}
+      cell.style.transition='transform .12s';
+      const sel=document.getElementById('hmCSel');
+      const viewLbl=sel?sel.options[sel.selectedIndex].text:'Your presence';
+      cell.addEventListener('mouseenter',e=>{
+        cell.style.transform='scale(1.1)';
+        const il=int.l.replace('\n',' ');
+        tipEl.innerHTML=`<div class="ttt">${src} · ${il}</div>`+(score===0?'<div style="color:#94a3b8;font-size:11px">No citations found.</div>':`<div class="ttr"><span>${viewLbl}</span><span>${CSTR[score]}</span></div>`);
+        tipEl.classList.add('visible'); moveTip(e);
+      });
+      cell.addEventListener('mousemove',moveTip);
+      cell.addEventListener('mouseleave',()=>{cell.style.transform='';tipEl.classList.remove('visible');});
+      td.appendChild(cell); tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  });
+  tbl.appendChild(tb);
+}
+function redrawCitHM(){buildCitHM(document.getElementById('hmCSel').value);}
+
+/* Citations table */
+const CITS=[
+  {url:'g2.com/categories/[category]',stype:'g2',stL:'G2 / Capterra',freq:109,fc:'fh',intent:'best',iL:'Best in category',iC:'it-best',comp:'Comp B, Comp C'},
+  {url:'g2.com/products/[brand]/reviews',stype:'g2',stL:'G2 / Capterra',freq:94,fc:'fh',intent:'wrt',iL:'Is it worth it?',iC:'it-wrt',comp:''},
+  {url:'capterra.com/[category]-software',stype:'g2',stL:'G2 / Capterra',freq:84,fc:'fh',intent:'best',iL:'Best in category',iC:'it-best',comp:'Comp B, Comp D'},
+  {url:'alternative.to/[competitor-a]',stype:'alt',stL:'Alt directory',freq:76,fc:'fh',intent:'alt',iL:'Alternatives',iC:'it-alt',comp:'Comp A, Comp C'},
+  {url:'[brand].com/integrations/[tool]',stype:'own',stL:'Owned',freq:68,fc:'fh',intent:'wrk',iL:'Works with...',iC:'it-wrk',comp:''},
+  {url:'reddit.com/r/[category]/comments/…',stype:'rd',stL:'Reddit',freq:62,fc:'fh',intent:'alt',iL:'Alternatives',iC:'it-alt',comp:'Comp B'},
+  {url:'[brand].com/blog/[use-case]',stype:'own',stL:'Owned',freq:44,fc:'fm',intent:'prb',iL:'Solve a problem',iC:'it-prb',comp:'Comp C'},
+  {url:'softwareadvice.com/[category]/',stype:'g2',stL:'G2 / Capterra',freq:44,fc:'fm',intent:'best',iL:'Best in category',iC:'it-best',comp:'Comp B'},
+  {url:'reddit.com/r/[category]/comments/…',stype:'rd',stL:'Reddit',freq:38,fc:'fm',intent:'prb',iL:'Solve a problem',iC:'it-prb',comp:'Comp C'},
+  {url:'partnersite.com/[integration-page]',stype:'ed',stL:'Editorial',freq:22,fc:'fm',intent:'wrk',iL:'Works with...',iC:'it-wrk',comp:''},
+  {url:'techblog.com/best-[category]-tools',stype:'ed',stL:'Editorial',freq:18,fc:'fl',intent:'best',iL:'Best in category',iC:'it-best',comp:'Comp B, Comp A'},
+  {url:'alternative.to/[competitor-b]',stype:'alt',stL:'Alt directory',freq:14,fc:'fl',intent:'alt',iL:'Alternatives',iC:'it-alt',comp:'Comp A'},
+];
+const STC={g2:'st-g2',alt:'st-alt',rd:'st-rd',ed:'st-ed',own:'st-own'};
+
+function buildCitTable(rows){
+  const b=document.getElementById('citB'); b.innerHTML='';
+  rows.forEach(d=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><span style="color:var(--indigo);font-size:12px;font-weight:500">${d.url}</span></td><td><span class="stag ${STC[d.stype]}">${d.stL}</span></td><td><span class="freq ${d.fc}">${d.freq} responses</span></td><td><span class="itag ${d.iC}">${d.iL}</span></td><td>${d.comp?`<span class="cpy">${d.comp}</span>`:'<span class="cpn">None</span>'}</td>`;
+    b.appendChild(tr);
+  });
+}
+function filterCit(){
+  const i=document.getElementById('fCI').value,s=document.getElementById('fCS').value;
+  buildCitTable(CITS.filter(d=>(i==='all'||d.intent===i)&&(s==='all'||d.stype===s)));
+}
+
+/* ── Brand footprint table ── */
+const BRANDS=[
+  {
+    name:'You', you:true,
+    sources:6, responses:246,
+    topType:'Owned', topTypeClass:'st-own',
+    urls:[
+      {url:'[brand].com/integrations/[tool]',   st:'Owned',    stc:'st-own', freq:68, iL:'Works with...',    ic:'it-wrk'},
+      {url:'[brand].com/blog/[use-case]',        st:'Owned',    stc:'st-own', freq:44, iL:'Solve a problem',  ic:'it-prb'},
+      {url:'g2.com/products/[brand]/reviews',    st:'G2',       stc:'st-g2',  freq:94, iL:'Is it worth it?',  ic:'it-wrt'},
+      {url:'reddit.com/r/[cat]/comments/…',      st:'Reddit',   stc:'st-rd',  freq:22, iL:'Solve a problem',  ic:'it-prb'},
+      {url:'partnersite.com/[integration-page]', st:'Editorial',stc:'st-ed',  freq:22, iL:'Works with...',    ic:'it-wrk'},
+      {url:'[brand].com/vs/competitor-c',        st:'Owned',    stc:'st-own', freq:18, iL:'Alternatives',     ic:'it-alt'},
+    ]
+  },
+  {
+    name:'Competitor A', you:false,
+    sources:9, responses:412,
+    topType:'Alt directory', topTypeClass:'st-alt',
+    urls:[
+      {url:'alternative.to/[competitor-a]',       st:'Alt dir',  stc:'st-alt', freq:76, iL:'Alternatives',     ic:'it-alt'},
+      {url:'g2.com/categories/[category]',         st:'G2',       stc:'st-g2',  freq:109,iL:'Best in category', ic:'it-best'},
+      {url:'capterra.com/[category]-software',     st:'G2',       stc:'st-g2',  freq:84, iL:'Best in category', ic:'it-best'},
+      {url:'softwareadvice.com/[category]/',       st:'G2',       stc:'st-g2',  freq:44, iL:'Best in category', ic:'it-best'},
+      {url:'techblog.com/best-[category]-tools',   st:'Editorial',stc:'st-ed',  freq:18, iL:'Best in category', ic:'it-best'},
+      {url:'reddit.com/r/[cat]/comments/…',        st:'Reddit',   stc:'st-rd',  freq:62, iL:'Alternatives',     ic:'it-alt'},
+      {url:'reddit.com/r/[cat]/comments/…',        st:'Reddit',   stc:'st-rd',  freq:38, iL:'Solve a problem',  ic:'it-prb'},
+      {url:'competitor-a.com/features',            st:'Owned',    stc:'st-own', freq:31, iL:'Best in category', ic:'it-best'},
+      {url:'competitor-a.com/vs/alternatives',     st:'Owned',    stc:'st-own', freq:26, iL:'Alternatives',     ic:'it-alt'},
+    ]
+  },
+  {
+    name:'Competitor B', you:false,
+    sources:7, responses:338,
+    topType:'G2 / Capterra', topTypeClass:'st-g2',
+    urls:[
+      {url:'g2.com/categories/[category]',         st:'G2',       stc:'st-g2',  freq:109,iL:'Best in category', ic:'it-best'},
+      {url:'capterra.com/[category]-software',     st:'G2',       stc:'st-g2',  freq:84, iL:'Best in category', ic:'it-best'},
+      {url:'reddit.com/r/[cat]/comments/…',        st:'Reddit',   stc:'st-rd',  freq:62, iL:'Alternatives',     ic:'it-alt'},
+      {url:'softwareadvice.com/[category]/',       st:'G2',       stc:'st-g2',  freq:44, iL:'Best in category', ic:'it-best'},
+      {url:'techblog.com/best-[category]-tools',   st:'Editorial',stc:'st-ed',  freq:18, iL:'Best in category', ic:'it-best'},
+      {url:'competitor-b.com/integrations',        st:'Owned',    stc:'st-own', freq:29, iL:'Works with...',    ic:'it-wrk'},
+      {url:'alternative.to/[competitor-b]',        st:'Alt dir',  stc:'st-alt', freq:14, iL:'Alternatives',     ic:'it-alt'},
+    ]
+  },
+  {
+    name:'Competitor C', you:false,
+    sources:4, responses:156,
+    topType:'Alt directory', topTypeClass:'st-alt',
+    urls:[
+      {url:'alternative.to/[competitor-a]',        st:'Alt dir',  stc:'st-alt', freq:76, iL:'Alternatives',     ic:'it-alt'},
+      {url:'g2.com/categories/[category]',         st:'G2',       stc:'st-g2',  freq:109,iL:'Best in category', ic:'it-best'},
+      {url:'reddit.com/r/[cat]/comments/…',        st:'Reddit',   stc:'st-rd',  freq:38, iL:'Solve a problem',  ic:'it-prb'},
+      {url:'competitor-c.com/compare',             st:'Owned',    stc:'st-own', freq:22, iL:'Alternatives',     ic:'it-alt'},
+    ]
+  },
+];
+
+const maxResp=Math.max(...BRANDS.map(b=>b.responses));
+
+function buildBrandTable(){
+  const body=document.getElementById('brandB'); body.innerHTML='';
+  BRANDS.forEach((brand,bi)=>{
+    // main row
+    const tr=document.createElement('tr');
+    tr.className='brand-main-row';
+    tr.id='br'+bi;
+    tr.onclick=()=>toggleBrand(bi);
+    const barW=Math.round((brand.responses/maxResp)*120);
+    tr.innerHTML=
+      `<td><span class="eic" id="bei${bi}" style="font-size:9px;color:var(--subtle);transition:transform .2s">▶</span></td>`+
+      `<td style="font-weight:600;font-size:13px">${brand.name}${brand.you?'<span class="brand-you-badge">YOU</span>':''}</td>`+
+      `<td style="font-size:13px;font-weight:600;color:var(--slate)">${brand.sources} <span style="font-size:11px;font-weight:400;color:var(--muted)">sources</span></td>`+
+      `<td>
+        <div class="bft-bar">
+          <div class="bft-seg" style="width:${barW}px;background:${brand.you?'#4F46E5':'#c7d2fe'}"></div>
+          <span style="font-size:12px;font-weight:600;color:var(--slate);margin-left:6px">${brand.responses}</span>
+        </div>
+      </td>`+
+      `<td><span class="stag ${brand.topTypeClass}">${brand.topType}</span></td>`;
+    body.appendChild(tr);
+
+    // sub rows (hidden by default)
+    brand.urls.forEach((u,ui)=>{
+      const sr=document.createElement('tr');
+      sr.className='brand-sub-row';
+      sr.id='bsr'+bi+'-'+ui;
+      sr.innerHTML=
+        `<td></td>`+
+        `<td><span style="color:var(--indigo);font-size:11px">${u.url}</span></td>`+
+        `<td><span class="stag ${u.stc}" style="font-size:10px">${u.st}</span></td>`+
+        `<td><span style="font-weight:600;color:var(--slate)">${u.freq}</span> <span style="color:var(--subtle);font-size:11px">responses</span></td>`+
+        `<td><span class="itag ${u.ic}" style="font-size:10px">${u.iL}</span></td>`;
+      body.appendChild(sr);
+    });
+  });
+}
+
+function toggleBrand(bi){
+  const isOpen=document.getElementById('bsr'+bi+'-0')?.classList.contains('open');
+  // close all
+  BRANDS.forEach((_,i)=>{
+    document.querySelectorAll(`[id^="bsr${i}-"]`).forEach(r=>r.classList.remove('open'));
+    const ic=document.getElementById('bei'+i);
+    if(ic) ic.style.transform='';
+    document.getElementById('br'+i)?.classList.remove('open');
+  });
+  if(!isOpen){
+    document.querySelectorAll(`[id^="bsr${bi}-"]`).forEach(r=>r.classList.add('open'));
+    const ic=document.getElementById('bei'+bi);
+    if(ic) ic.style.transform='rotate(90deg)';
+    document.getElementById('br'+bi)?.classList.add('open');
+  }
+}
+
+/* ══════════════════════════════════════════
+   ADD PROMPT MODAL
+══════════════════════════════════════════ */
+const PRELOADED=[
+  {text:'What are the best alternatives to HubSpot for B2B marketing teams?',intent:'Alternatives & comparisons',topic:'Campaign management'},
+  {text:'[Brand] vs Marketo — which is better for campaign automation?',intent:'Alternatives & comparisons',topic:'Campaign management'},
+  {text:'What are the best marketing automation tools for early-stage startups?',intent:'Best in category',topic:'Marketing automation'},
+  {text:'Which AEO monitoring platforms do experts recommend in 2025?',intent:'Best in category',topic:'AEO / AI visibility'},
+  {text:'Does [Brand] integrate with HubSpot for marketing workflows?',intent:'Works with...',topic:'Integrations'},
+  {text:'How do I improve AI answer visibility for my B2B SaaS product?',intent:'Solve a problem',topic:'AEO / AI visibility'},
+  {text:'Is [Brand] worth it for small marketing teams?',intent:'Is it worth it?',topic:'Validation'},
+];
+
+const COMPLETIONS=[
+  'What are the best alternatives to HubSpot for B2B marketing teams?',
+  'What are the best alternatives to Marketo for early-stage startups?',
+  'What are the best marketing automation tools for B2B startups?',
+  'Which AEO monitoring platforms do experts recommend in 2025?',
+  'Does [Brand] integrate with HubSpot for marketing workflows?',
+  'Does [Brand] integrate with Salesforce for campaign tracking?',
+  'How do I improve AI answer visibility for B2B SaaS?',
+  'How do I reduce customer acquisition cost using marketing automation?',
+  'Is [Brand] worth it for small marketing teams?',
+  'Is [Brand] reliable for B2B campaign management?',
+  'Best campaign intelligence tools for B2B SaaS companies',
+  'Why are teams switching from HubSpot to alternatives in 2025?',
+];
+
+const INTENT_MAP={
+  alt:'Alternatives & comparisons', best:'Best in category',
+  wrk:'Works with...', prb:'Solve a problem', wrt:'Is it worth it?'
+};
+const TOPIC_MAP={
+  alt:'Campaign management', best:'Marketing automation',
+  wrk:'Integrations', prb:'AEO / AI visibility', wrt:'Validation'
+};
+
+let queue=[], acIdx=-1, debTimer=null;
+
+function openModal(){
+  queue=PRELOADED.map(p=>({...p,suggested:true}));
+  document.getElementById('modalOv').classList.remove('hidden');
+  document.getElementById('msuccess').classList.remove('show');
+  document.getElementById('mbody').style.display='flex';
+  document.getElementById('mfooter').style.display='flex';
+  document.getElementById('minput').value='';
+  document.getElementById('maddBtn').disabled=true;
+  document.getElementById('mwarn').classList.remove('show');
+  renderQueue(); closeAC();
+}
+function closeModal(){document.getElementById('modalOv').classList.add('hidden');}
+function handleOvClick(e){if(e.target===document.getElementById('modalOv'))closeModal();}
+
+function onMInput(){
+  const v=document.getElementById('minput').value.trim();
+  const ok=/^(what|how|is|does|which|why|can|when|who|where|are|top|best)/i.test(v);
+  document.getElementById('maddBtn').disabled=v.length<10||!ok;
+  document.getElementById('mwarn').classList.toggle('show',v.length>12&&!ok);
+  clearTimeout(debTimer);
+  if(v.length>=3) debTimer=setTimeout(()=>showAC(v),280);
+  else closeAC();
+}
+
+function showAC(partial){
+  const existing=queue.map(q=>q.text.toLowerCase());
+  const matches=COMPLETIONS.filter(c=>c.toLowerCase().includes(partial.toLowerCase())&&!existing.includes(c.toLowerCase())).slice(0,5);
+  const drop=document.getElementById('acdrop');
+  if(!matches.length){closeAC();return;}
+  drop.innerHTML=matches.map((m,i)=>{
+    const idx=m.toLowerCase().indexOf(partial.toLowerCase());
+    const hi=idx>=0?m.slice(0,idx)+'<b>'+m.slice(idx,idx+partial.length)+'</b>'+m.slice(idx+partial.length):m;
+    return `<div class="ac-item" onclick="selectAC('${m.replace(/'/g,"\\'")}')">` +hi+`</div>`;
+  }).join('');
+  drop.classList.add('open'); acIdx=-1;
+}
+function closeAC(){document.getElementById('acdrop').classList.remove('open');}
+function selectAC(text){document.getElementById('minput').value=text;document.getElementById('maddBtn').disabled=false;document.getElementById('mwarn').classList.remove('show');closeAC();}
+
+function onMKey(e){
+  const items=document.querySelectorAll('.ac-item');
+  if(!document.getElementById('acdrop').classList.contains('open')||!items.length){if(e.key==='Enter'){e.preventDefault();addToQueue();}return;}
+  if(e.key==='ArrowDown'){e.preventDefault();acIdx=Math.min(acIdx+1,items.length-1);items.forEach((el,i)=>el.classList.toggle('hi',i===acIdx));}
+  else if(e.key==='ArrowUp'){e.preventDefault();acIdx=Math.max(acIdx-1,-1);items.forEach((el,i)=>el.classList.toggle('hi',i===acIdx));}
+  else if(e.key==='Enter'){e.preventDefault();if(acIdx>=0&&items[acIdx])items[acIdx].click();else addToQueue();}
+  else if(e.key==='Escape')closeAC();
+}
+
+function classifyPrompt(text){
+  const t=text.toLowerCase();
+  if(/\balternative|\bvs\b|\bcompare|\bcompetitor/.test(t)) return {intent:'Alternatives & comparisons',topic:'Campaign management'};
+  if(/\bbest\b|\btop\b|\bleading/.test(t)) return {intent:'Best in category',topic:'Marketing automation'};
+  if(/\bintegrat|\bwork with|\bconnect/.test(t)) return {intent:'Works with...',topic:'Integrations'};
+  if(/\bhow do|\bwhat is the best way|\bimprove/.test(t)) return {intent:'Solve a problem',topic:'AEO / AI visibility'};
+  if(/\bworth it|\breliable|\breview|\blegit/.test(t)) return {intent:'Is it worth it?',topic:'Validation'};
+  return {intent:'Best in category',topic:'General'};
+}
+
+function addToQueue(){
+  const v=document.getElementById('minput').value.trim();
+  if(!v||queue.some(q=>q.text===v))return;
+  const cls=classifyPrompt(v);
+  queue.push({text:v,...cls,suggested:false,classifying:false});
+  document.getElementById('minput').value='';
+  document.getElementById('maddBtn').disabled=true;
+  closeAC();
+  renderQueue();
+}
+
+function removeFromQueue(idx){queue.splice(idx,1);renderQueue();}
+
+function renderQueue(){
+  const list=document.getElementById('mqlist'); list.innerHTML='';
+  if(!queue.length){list.innerHTML='<div style="font-size:12px;color:var(--subtle);padding:20px 0;text-align:center">Queue is empty · type a prompt above</div>';updateFooter();return;}
+  queue.forEach((item,idx)=>{
+    const div=document.createElement('div');
+    div.className='qi'+(item.suggested?' suggested':'');
+    div.innerHTML=
+      `<div style="flex:1"><div class="qi-txt">${item.text}</div>`+
+      `<div class="qi-tags">`+
+        `<span class="itag" style="font-size:10px;padding:2px 6px;background:#eef2ff;color:#4338ca">${item.intent}</span>`+
+        `<span class="tchip" style="font-size:10px">${item.topic}</span>`+
+      `</div>`+
+      (item.suggested?'<span class="qi-slbl">Suggested from onboarding</span>':'')+
+      `</div>`+
+      `<button class="qi-rm" onclick="removeFromQueue(${idx})">×</button>`;
+    list.appendChild(div);
+  });
+  updateFooter();
+}
+
+function updateFooter(){
+  const total=queue.length,sug=queue.filter(q=>q.suggested).length,added=total-sug;
+  document.getElementById('mfcount').innerHTML=total===0?'':
+    `<span>${total}</span> prompt${total!==1?'s':''} · ${sug} suggested · ${added} added`;
+  document.getElementById('msave').disabled=total===0;
+  document.getElementById('msub').textContent=`${sug} preloaded · ${added} added by you`;
+  document.getElementById('mqhdr').textContent=`Queue · ${total} prompt${total!==1?'s':''}`;
+}
+
+function saveAll(){
+  const n=queue.length;
+  document.getElementById('mbody').style.display='none';
+  document.getElementById('mfooter').style.display='none';
+  const ss=document.getElementById('msuccess');
+  ss.classList.add('show');
+  document.getElementById('mspill').textContent=`${n} prompt${n!==1?'s':''} now tracking`;
+  setTimeout(closeModal,2400);
+}
+
+document.addEventListener('click',e=>{if(!e.target.closest('.ac'))closeAC();});
+
+/* ══════════════════════════════════════════
+   INIT
+══════════════════════════════════════════ */
+buildPHeatmap();
+build('all');
+buildCitHM('you');
+buildCitTable(CITS);
+buildBrandTable();
+// Init chart on load since overview is default page
+window.addEventListener('load',()=>{initChart();chartInited=true;});
+</script>
+</body>
+</html>
