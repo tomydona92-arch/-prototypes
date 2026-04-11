@@ -259,6 +259,117 @@ tbody td{padding:12px 14px;vertical-align:middle}
 .ttt{font-weight:700;margin-bottom:4px;font-size:12px}
 .ttr{display:flex;justify-content:space-between;gap:12px;color:#94a3b8}
 .ttr span:last-child{color:#fff;font-weight:500}
+
+/* ── RECOMMENDATIONS PANEL ── */
+:root{--green:#166534;--green-bg:#f0fdf4;--green-border:#bbf7d0;--amber:#92400e;--amber-bg:#fffbeb;--amber-border:#fde68a;--red:#991b1b;--red-bg:#fef2f2;--red-border:#fecaca;}
+@keyframes pulse-r{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes spin-r{to{transform:rotate(360deg)}}
+.pulsing{animation:pulse-r 1.6s ease-in-out infinite}
+.rec-overlay{position:fixed;inset:0;background:rgba(0,0,0,.15);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s}
+.rec-overlay.on{opacity:1;pointer-events:all}
+.rec-panel{position:fixed;top:0;right:0;width:580px;height:100vh;background:var(--white);border-left:1px solid var(--border);z-index:101;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
+.rec-panel.on{transform:translateX(0)}
+.rp-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.rp-titles{flex:1;min-width:0}
+.rp-eyebrow{font-size:10px;font-weight:600;color:var(--subtle);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.rp-page{font-size:13px;font-weight:500;color:var(--slate);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rp-close{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;font-family:inherit}
+.rp-close:hover{background:#f3f4f6}
+.rp-seo-bar{padding:8px 18px;background:var(--green-bg,#f0fdf4);border-bottom:1px solid var(--green-border,#bbf7d0);display:flex;align-items:center;gap:6px;flex-shrink:0}
+.rp-loading{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:32px}
+.rp-spinner{width:20px;height:20px;border:2px solid #c7d2fe;border-top-color:#4F46E5;border-radius:50%;animation:spin-r .7s linear infinite}
+.rp-log{display:flex;flex-direction:column;gap:5px;margin-top:12px;width:100%;max-width:320px}
+.rp-ll{font-size:12px;display:flex;align-items:center;gap:7px}
+.rp-ll.done{color:#166534}.rp-ll.active{color:#4F46E5}.rp-ll.idle{color:var(--subtle)}
+.rp-lld{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.rp-diff{flex:1;display:none;flex-direction:column;overflow:hidden}
+.rp-diff.on{display:flex}
+.rp-cols{flex:1;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;border-bottom:1px solid var(--border)}
+.rp-col{display:flex;flex-direction:column;overflow:hidden}
+.rp-col+.rp-col{border-left:1px solid var(--border)}
+.rp-col-head{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;flex-shrink:0;background:#fafaf8}
+.rp-col-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--subtle)}
+.rp-col-badge{font-size:10px;padding:1px 6px;border-radius:4px}
+.rp-badge-before{background:#f3f4f6;color:var(--muted)}
+.rp-badge-after{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+.rp-body{flex:1;overflow-y:auto;padding:14px}
+.rp-sec-lbl{font-size:10px;font-weight:600;color:var(--subtle);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.rp-text{font-size:13px;line-height:1.7}
+.rp-text.before{color:var(--muted)}.rp-text.after{color:var(--text,#1a1a1a)}
+.diff-new{background:#dcfce7;border-radius:2px;padding:0 1px;color:#166534}
+.rp-chat{flex-shrink:0;border-top:1px solid var(--border);background:var(--white)}
+.rp-chat-hist{max-height:120px;overflow-y:auto;padding:8px 14px 0;display:flex;flex-direction:column;gap:6px}
+.chat-msg{font-size:12px;line-height:1.5;padding:6px 10px;border-radius:6px;max-width:85%}
+.chat-msg.user{background:#eef2ff;color:#3730a3;align-self:flex-end}
+.chat-msg.agent{background:#f3f4f6;color:var(--muted);align-self:flex-start}
+.rp-chat-row{display:flex;align-items:center;gap:8px;padding:10px 14px}
+.rp-chat-in{flex:1;font-size:13px;font-family:inherit;border:1px solid var(--border);border-radius:6px;padding:8px 12px;outline:none;resize:none;line-height:1.4}
+.rp-chat-in:focus{border-color:#c7d2fe}
+.rp-chat-in::placeholder{color:var(--subtle)}
+.rp-send{width:32px;height:32px;border-radius:6px;background:#4F46E5;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rp-send:hover{background:#4338ca}.rp-send:disabled{opacity:.4;cursor:not-allowed}
+.rp-send svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.rp-footer{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;background:#fafaf8}
+.rpf-btn{padding:8px 0;border-radius:6px;font-size:13px;font-family:inherit;cursor:pointer;font-weight:600;border:1px solid var(--border);background:var(--white);color:var(--text,#1a1a1a);flex:1;text-align:center}
+.rpf-btn:hover{background:#f0ede8}
+.rpf-btn.primary{background:#4F46E5;color:#fff;border-color:#4F46E5}
+.rpf-btn.primary:hover{background:#4338ca}
+.rpf-btn.success{background:#f0fdf4;color:#166534;border-color:#bbf7d0}
+.rec-section{background:var(--white);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden}
+.rec-sec-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.rec-sec-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.rec-sec-titles{flex:1}
+.rec-sec-name{font-size:13px;font-weight:600}
+.rec-sec-desc{font-size:12px;color:var(--muted);margin-top:1px}
+.rec-sec-badge{font-size:12px;font-weight:600;padding:2px 9px;border-radius:10px}
+.rec-tbl-head{display:grid;grid-template-columns:1fr auto auto;gap:16px;padding:8px 20px;background:#fafaf8;border-bottom:1px solid var(--border)}
+.rec-tbl-head span{font-size:10px;font-weight:600;color:var(--subtle);text-transform:uppercase;letter-spacing:.06em}
+.rec-row{border-bottom:1px solid var(--border)}
+.rec-row:last-child{border-bottom:none}
+.rec-row-top{display:grid;grid-template-columns:1fr auto auto;gap:16px;padding:13px 20px;align-items:center;cursor:pointer;transition:background .15s}
+.rec-row-top:hover{background:#fafaf8}
+.rec-row.open .rec-row-top{background:#fafaf8}
+.rec-page-url{font-size:13px;font-weight:500}
+.rec-page-meta{font-size:12px;color:var(--muted);margin-top:2px;display:flex;align-items:center;gap:6px}
+.rec-gsc{font-size:11px;padding:1px 7px;border-radius:4px;background:#f3f4f6;color:var(--muted)}
+.roi-pill{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;background:var(--indigo-l);color:#3730a3;border:1px solid #c7d2fe}
+.rec-chev{color:var(--subtle);font-size:16px;transition:transform .2s;line-height:1}
+.rec-row.open .rec-chev{transform:rotate(90deg)}
+.rec-drawer{display:none;border-top:1px solid var(--border);background:#fafaf9}
+.rec-row.open .rec-drawer{display:block}
+.rec-steps{padding:4px 0 0}
+.rec-step{display:flex;gap:10px;padding:10px 20px;position:relative}
+.rec-step::after{content:'';position:absolute;left:30px;top:34px;bottom:0;width:1px;background:var(--border)}
+.rec-step:last-child::after{display:none}
+.rsi{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1;margin-top:2px}
+.rsi-done{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}
+.rsi-active{background:#eef2ff;border:1px solid #c7d2fe;color:#4F46E5}
+.rsi-idle{background:#f3f4f6;border:1px solid var(--border);color:var(--subtle)}
+.rec-step-body{flex:1}
+.rec-step-title{font-size:12px;font-weight:600}
+.rec-step-note{font-size:12px;color:var(--muted);margin-top:1px;line-height:1.5}
+.pm-list{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+.pm-item{display:flex;align-items:flex-start;gap:6px;padding:6px 10px;background:var(--white);border:1px solid var(--border);border-radius:6px}
+.pm-intent{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;background:#eef2ff;color:#3730a3;white-space:nowrap;flex-shrink:0;margin-top:1px}
+.pm-text{font-size:12px;line-height:1.4}
+.rchips{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
+.rchip{font-size:11px;padding:2px 7px;border-radius:4px}
+.rc-n{background:#f3f4f6;color:var(--muted)}
+.rc-bad{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+.rc-warn{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+.rc-good{background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe}
+.rec-action-bar{border-top:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;background:var(--white)}
+.rec-action-note{font-size:12px;color:var(--muted);flex:1;font-style:italic;line-height:1.5}
+.rec-abtn{padding:7px 16px;border-radius:6px;font-size:12px;font-family:inherit;cursor:pointer;font-weight:600;border:1px solid var(--border);background:var(--white);transition:all .15s;white-space:nowrap}
+.rec-abtn:hover{background:#f0ede8}
+.rec-abtn.primary{background:#4F46E5;color:#fff;border-color:#4F46E5}
+.rec-abtn.primary:hover{background:#4338ca}
+.rec-abtn:disabled{opacity:.5;cursor:not-allowed}
+.nudge-bar{background:var(--indigo-l);border:1px solid var(--h2);border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.nudge-text{font-size:12px;color:var(--h5)}
+.nudge-btn{background:var(--indigo);color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0}
+.nudge-btn:hover{background:#4338ca}
+
 </style>
 </head>
 <body>
@@ -277,7 +388,7 @@ tbody td{padding:12px 14px;vertical-align:middle}
     <div class="ni active" id="ni-overview" onclick="nav('overview')">🏠 Overview</div>
     <div class="ni" id="ni-prompts"   onclick="nav('prompts')">🔍 Prompts</div>
     <div class="ni" id="ni-citations" onclick="nav('citations')">🔗 Citations</div>
-    <div class="ni" id="ni-seo"       onclick="nav('seo')">⚖️ SEO × AEO</div>
+    <div class="ni" id="ni-recommendations" onclick="nav('recommendations')">⚡ Recommendations</div>
   </div>
 </div>
 
@@ -288,26 +399,31 @@ tbody td{padding:12px 14px;vertical-align:middle}
     <button class="btn-outline" onclick="exportData()">↓ Export data</button>
   </div>
 
-  <div class="kpi-strip" style="grid-template-columns:repeat(3,1fr)">
+  <div class="kpi-strip" style="grid-template-columns:repeat(4,1fr)">
     <div class="kpi">
       <div class="kpi-lbl">AI Visibility</div>
       <div class="kpi-val">21%</div>
       <div class="kpi-d up">↑ 3pp vs last week</div>
     </div>
     <div class="kpi">
-      <div class="kpi-lbl">Prompts tracked</div>
-      <div class="kpi-val">16</div>
-      <div class="kpi-d nt">across 5 intent types</div>
+      <div class="kpi-lbl">New citations this week</div>
+      <div class="kpi-val">14</div>
+      <div class="kpi-d up">↑ 3 vs last week</div>
     </div>
     <div class="kpi">
-      <div class="kpi-lbl">Topics identified</div>
-      <div class="kpi-val">6</div>
-      <div class="kpi-d nt">auto-classified</div>
+      <div class="kpi-lbl">SEO × AEO opportunities</div>
+      <div class="kpi-val">7</div>
+      <div class="kpi-d nt">pages matched to prompt gaps</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-lbl">New content opportunities</div>
+      <div class="kpi-val">3</div>
+      <div class="kpi-d nt">identified this week</div>
     </div>
   </div>
 
   <div class="card">
-    <div class="clbl">AI visibility ranking — consideration prompts</div>
+    <div class="clbl">Share of voice — AI responses</div>
     <div class="lb-row">
       <div class="lb-rank">#1</div><div class="lb-name">Competitor B</div>
       <div class="lb-bw"><div class="lb-bar" style="width:35%;background:#c7d2fe;color:var(--slate)">35%</div></div>
@@ -371,6 +487,12 @@ tbody td{padding:12px 14px;vertical-align:middle}
       <div class="cl"><div class="cs" style="background:#c7d2fe"></div> Gemini</div>
     </div>
   </div>
+
+  <!-- Share of Voice by intent -->
+  <div class="card">
+    <div class="clbl">Your citation share by source type</div>
+    <div id="cit-share-wrap"></div>
+  </div>
 </div>
 
 <!-- ═══ PAGE: PROMPTS ═══ -->
@@ -383,11 +505,11 @@ tbody td{padding:12px 14px;vertical-align:middle}
   <div class="card">
     <div class="clbl">Prompt coverage by intent</div>
     <div class="intent-chart">
-      <div class="irow"><div class="iname">Alternatives &amp; comparisons</div><div class="bwrap"><div class="seg w" style="width:25%">1</div><div class="seg m" style="width:25%">1</div><div class="seg g" style="width:50%">2</div></div><div class="icnt">4 prompts</div></div>
-      <div class="irow"><div class="iname">Best in category</div><div class="bwrap"><div class="seg w" style="width:60%">3</div><div class="seg m" style="width:20%">1</div><div class="seg g" style="width:20%">1</div></div><div class="icnt">5 prompts</div></div>
-      <div class="irow"><div class="iname">Works with...</div><div class="bwrap"><div class="seg m" style="width:33%">1</div><div class="seg g" style="width:67%">2</div></div><div class="icnt">3 prompts</div></div>
-      <div class="irow"><div class="iname">Solve a problem</div><div class="bwrap"><div class="seg w" style="width:50%">2</div><div class="seg m" style="width:50%">2</div></div><div class="icnt">4 prompts</div></div>
-      <div class="irow"><div class="iname">Is it worth it?</div><div class="bwrap"><div class="seg e">No prompts tracked yet</div></div><div class="icnt">0 prompts</div></div>
+      <div class="irow"><div class="iname">Alternatives &amp; comparisons<div style="font-size:10px;color:#9ca3af;font-weight:400;margin-top:1px">vs pages, switching guides</div></div><div class="bwrap"><div class="seg w" style="width:25%">1</div><div class="seg m" style="width:25%">1</div><div class="seg g" style="width:50%">2</div></div><div class="icnt">4 prompts</div></div>
+      <div class="irow"><div class="iname">Best in category<div style="font-size:10px;color:#9ca3af;font-weight:400;margin-top:1px">roundups, top 10 lists</div></div><div class="bwrap"><div class="seg w" style="width:60%">3</div><div class="seg m" style="width:20%">1</div><div class="seg g" style="width:20%">1</div></div><div class="icnt">5 prompts</div></div>
+      <div class="irow"><div class="iname">Works with...<div style="font-size:10px;color:#9ca3af;font-weight:400;margin-top:1px">integration pages, partner content</div></div><div class="bwrap"><div class="seg m" style="width:33%">1</div><div class="seg g" style="width:67%">2</div></div><div class="icnt">3 prompts</div></div>
+      <div class="irow"><div class="iname">Solve a problem<div style="font-size:10px;color:#9ca3af;font-weight:400;margin-top:1px">how-to guides, troubleshooting</div></div><div class="bwrap"><div class="seg w" style="width:50%">2</div><div class="seg m" style="width:50%">2</div></div><div class="icnt">4 prompts</div></div>
+      <div class="irow"><div class="iname">Is it worth it?<div style="font-size:10px;color:#9ca3af;font-weight:400;margin-top:1px">review pages, ROI content</div></div><div class="bwrap"><div class="seg e">No prompts tracked yet</div></div><div class="icnt">0 prompts</div></div>
     </div>
     <div class="pleg">
       <div class="pl"><div class="psw" style="background:var(--h5)"></div> Winning</div>
@@ -418,14 +540,30 @@ tbody td{padding:12px 14px;vertical-align:middle}
     </div>
   </div>
 
+  <div class="nudge-bar">
+    <div class="nudge-text">⚡ 8 of your Gap prompts may already have relevant content — fixing the page structure could close those gaps.</div>
+    <button class="nudge-btn" onclick="nav('recommendations')">View recommendations</button>
+  </div>
+
   <div class="tcard">
     <div class="tbar">
       <div class="tlbl">All prompts · sorted by signal</div>
-      <div class="tfs">
-        <button class="fb active" onclick="ft(this,'all')">All</button>
-        <button class="fb" onclick="ft(this,'gap')">Gap</button>
-        <button class="fb" onclick="ft(this,'watch')">Watch</button>
-        <button class="fb" onclick="ft(this,'winning')">Winning</button>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <input id="p-search" style="border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:11px;font-family:inherit;outline:none;width:190px" placeholder="Search prompts, topics, competitors…" oninput="searchP(this.value)">
+        <select id="p-intent" onchange="applyPF()" class="fsel">
+          <option value="all">All intents</option>
+          <option value="alt">Alternatives</option>
+          <option value="best">Best in category</option>
+          <option value="wrk">Works with</option>
+          <option value="prb">Solve a problem</option>
+          <option value="wrt">Is it worth it?</option>
+        </select>
+        <div class="tfs">
+          <button class="fb active" onclick="ft(this,'all')">All</button>
+          <button class="fb" onclick="ft(this,'gap')">Gap</button>
+          <button class="fb" onclick="ft(this,'watch')">Watch</button>
+          <button class="fb" onclick="ft(this,'winning')">Winning</button>
+        </div>
       </div>
     </div>
     <table><thead><tr><th style="width:32px"></th><th>Prompt</th><th>Visibility</th><th>Avg position</th><th>Sentiment</th><th>Signal</th></tr></thead>
@@ -440,12 +578,8 @@ tbody td{padding:12px 14px;vertical-align:middle}
   </div>
 
   <div class="card">
-    <div class="clbl">Citation share by source type</div>
-    <div class="sr"><div class="slbl">G2 / Capterra</div><div class="sfrq">287 responses</div><div class="sbw"><div class="ss s-you" style="width:18%">18%</div><div class="ss s-cb" style="width:44%">Comp B · 44%</div><div class="ss s-ca" style="width:22%">Comp A · 22%</div><div class="ss s-ot" style="width:16%">16%</div></div></div>
-    <div class="sr"><div class="slbl">Alternative directories</div><div class="sfrq">152 responses</div><div class="sbw"><div class="ss s-you" style="width:8%">8%</div><div class="ss s-cb" style="width:28%">28%</div><div class="ss s-ca" style="width:52%">Comp A · 52%</div><div class="ss s-ot" style="width:12%">12%</div></div></div>
-    <div class="sr"><div class="slbl">Reddit / community</div><div class="sfrq">118 responses</div><div class="sbw"><div class="ss s-you" style="width:24%">24%</div><div class="ss s-cb" style="width:18%">18%</div><div class="ss s-ca" style="width:38%">Comp A · 38%</div><div class="ss s-ot" style="width:20%">20%</div></div></div>
-    <div class="sr"><div class="slbl">Editorial blogs</div><div class="sfrq">84 responses</div><div class="sbw"><div class="ss s-you" style="width:31%">31%</div><div class="ss s-cb" style="width:29%">29%</div><div class="ss s-ca" style="width:24%">24%</div><div class="ss s-ot" style="width:16%">16%</div></div></div>
-    <div class="sr"><div class="slbl">Owned content</div><div class="sfrq">62 responses</div><div class="sbw"><div class="ss s-you" style="width:14%">14%</div><div class="ss s-cb" style="width:31%">31%</div><div class="ss s-ca" style="width:22%">22%</div><div class="ss s-ot" style="width:33%">33%</div></div></div>
+    <div class="clbl">Citation appearances by source type</div>
+    <div id="cit-grouped-bars"></div>
     <div class="sleg">
       <div class="sl"><div class="ssw" style="background:#3730a3"></div> You</div>
       <div class="sl"><div class="ssw" style="background:#818cf8"></div> Competitor B</div>
@@ -475,10 +609,35 @@ tbody td{padding:12px 14px;vertical-align:middle}
     </div>
   </div>
 
+  <div class="tcard" style="margin-top:14px">
+    <div class="tbar">
+      <div class="tlbl">Citation footprint by brand</div>
+      <div style="font-size:11px;color:var(--subtle)">How many sources each brand appears in — and which ones</div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:32px"></th>
+          <th>Brand</th>
+          <th>Unique sources</th>
+          <th>Total responses</th>
+          <th>Strongest source type</th>
+        </tr>
+      </thead>
+      <tbody id="brandB"></tbody>
+    </table>
+  </div>
+
+  <div class="nudge-bar" style="margin-top:14px">
+    <div class="nudge-text">⚡ Competitors are cited from owned content on 6 prompts where you have no page.</div>
+    <button class="nudge-btn" onclick="nav('recommendations')">View recommendations</button>
+  </div>
+
   <div class="tcard">
     <div class="tbar">
       <div class="tlbl">All citation sources · sorted by frequency</div>
-      <div style="display:flex;gap:8px;align-items:center">
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <input id="cit-search" style="border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:11px;font-family:inherit;outline:none;width:180px" placeholder="Search URLs, competitors…" oninput="searchCit(this.value)">
         <span style="font-size:11px;color:var(--subtle)">Intent</span>
         <select class="fsel" id="fCI" onchange="filterCit()">
           <option value="all">All intents</option>
@@ -504,37 +663,65 @@ tbody td{padding:12px 14px;vertical-align:middle}
   </div>
 
   <!-- Brand footprint table -->
-  <div class="tcard" style="margin-top:14px">
-    <div class="tbar">
-      <div class="tlbl">Citation footprint by brand</div>
-      <div style="font-size:11px;color:var(--subtle)">How many sources each brand appears in — and which ones</div>
-    </div>
-    <table>
-      <thead>
-        <tr>
-          <th style="width:32px"></th>
-          <th>Brand</th>
-          <th>Unique sources</th>
-          <th>Total responses</th>
-          <th>Strongest source type</th>
-        </tr>
-      </thead>
-      <tbody id="brandB"></tbody>
-    </table>
-  </div>
 </div>
 
-<!-- ═══ PAGE: SEO × AEO ═══ -->
-<div class="page" id="page-seo">
-  <div class="ph"><div><div class="pt">SEO × AEO</div><div class="ps">Connect retrieval strength to AI answer presence</div></div></div>
-  <div class="card" style="text-align:center;padding:60px 20px">
-    <div style="font-size:32px;margin-bottom:12px">⚖️</div>
-    <div style="font-size:16px;font-weight:600;color:var(--slate);margin-bottom:8px">Coming next phase</div>
-    <div style="font-size:13px;color:var(--muted);max-width:400px;margin:0 auto">The SEO × AEO quadrant screen — connecting Google ranking data to LLM visibility — is designed and ready to build. It requires the GSC embedding infrastructure to be validated first.</div>
+<!-- ═══ PAGE: RECOMMENDATIONS ═══ -->
+<div class="page" id="page-recommendations">
+  <div class="ph">
+    <div><div class="pt">Recommendations</div><div class="ps">GSC pages matched to tracked prompts — surgical fixes that improve AI visibility without affecting search ranking</div></div>
+    <span style="font-size:11px;color:var(--muted)">GSC synced 2h ago</span>
   </div>
+  <div id="rec-sections"></div>
 </div>
 
 </div><!-- /shell -->
+
+<!-- REC OVERLAY + PANEL -->
+<div class="rec-overlay" id="rec-overlay" onclick="closeRecPanel()"></div>
+<div class="rec-panel" id="rec-panel">
+  <div class="rp-header">
+    <div class="rp-titles">
+      <div class="rp-eyebrow">Suggested fix</div>
+      <div class="rp-page" id="rp-page-label">—</div>
+    </div>
+    <button class="rp-close" onclick="closeRecPanel()">✕</button>
+  </div>
+  <div class="rp-seo-bar">
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 5-5" stroke="#166534" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span style="font-size:11px;color:#166534" id="rp-seo-text">GSC rank protected — fix targets intro only</span>
+  </div>
+  <div class="rp-loading" id="rp-loading">
+    <div class="rp-spinner"></div>
+    <div style="font-size:12px;color:var(--muted);margin-top:4px">Analysing page…</div>
+    <div class="rp-log" id="rp-log"></div>
+  </div>
+  <div class="rp-diff" id="rp-diff">
+    <div class="rp-cols">
+      <div class="rp-col">
+        <div class="rp-col-head"><span class="rp-col-lbl">Current</span><span class="rp-col-badge rp-badge-before">Live</span></div>
+        <div class="rp-body" id="rp-before"></div>
+      </div>
+      <div class="rp-col">
+        <div class="rp-col-head"><span class="rp-col-lbl">Suggested</span><span class="rp-col-badge rp-badge-after">AI rewrite</span></div>
+        <div class="rp-body" id="rp-after"></div>
+      </div>
+    </div>
+    <div class="rp-chat">
+      <div class="rp-chat-hist" id="rp-chat-hist"></div>
+      <div class="rp-chat-row">
+        <textarea class="rp-chat-in" id="rp-chat-in" rows="1" placeholder='Direct the rewrite — e.g. "make it shorter" or "lead with pricing"'></textarea>
+        <button class="rp-send" id="rp-send" onclick="sendRecChat()">
+          <svg viewBox="0 0 14 14"><line x1="7" y1="12" x2="7" y2="2"/><polyline points="3,6 7,2 11,6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="rp-footer" id="rp-footer" style="display:none">
+    <button class="rpf-btn primary" id="rp-approve" onclick="approveRecEdit()">Approve &amp; copy</button>
+    <button class="rpf-btn" onclick="closeRecPanel()">Dismiss</button>
+  </div>
+</div>
+
 
 <!-- ═══ ADD PROMPT MODAL ═══ -->
 <div class="ov hidden" id="modalOv" onclick="handleOvClick(event)">
@@ -589,6 +776,7 @@ function nav(id) {
   document.getElementById('page-'+id).classList.add('active');
   document.getElementById('ni-'+id).classList.add('active');
   if(id==='overview' && !chartInited){ initChart(); chartInited=true; }
+  if(id==='recommendations'){ buildRecSections(); }
 }
 
 function exportData(){ alert('Export data — CSV download would trigger here'); }
@@ -760,9 +948,9 @@ const IC={alt:'it-alt',best:'it-best',wrk:'it-wrk',prb:'it-prb',wrt:'it-wrt'};
 const CC={winning:'cw',watch:'cm',gap:'cg'};
 function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
 
-function build(f){
+function buildFromData(data){
   const tb=document.getElementById('tb'); tb.innerHTML='';
-  P.filter(d=>f==='all'||d.sig===f).sort((a,b)=>ORD[a.sig]-ORD[b.sig]).forEach(d=>{
+  data.sort((a,b)=>ORD[a.sig]-ORD[b.sig]).forEach(d=>{
     const tr=document.createElement('tr'); tr.className='dr'; tr.id='r'+d.id; tr.onclick=()=>toggle(d.id);
     tr.innerHTML=`<td><span class="eic" id="ei${d.id}">▶</span></td><td><div class="ptxt">${d.text}</div><span class="itag ${IC[d.intent]}">${d.iLabel}</span></td><td><span class="met ${d.vc}">${d.vis}</span><span class="albl">4w avg</span></td><td><span class="met ${d.pc}">${d.pos}</span></td><td><span class="met ${d.sc}">${d.sent}</span></td><td><span class="chip ${CC[d.sig]}">${cap(d.sig)}</span></td>`;
     document.getElementById('tb').appendChild(tr);
@@ -770,10 +958,14 @@ function build(f){
     const brands=d.brands.map(b=>`<div class="brow"><div class="bdot" style="background:${b.c}"></div><div class="bnm">${b.n}${b.you?'<span class="yb">YOU</span>':''}</div><div class="bpos">${b.p}</div></div>`).join('');
     const topics=d.topics.map(t=>`<span class="tchip">${t}</span>`).join('');
     const cits=d.cits.map(c=>`<div class="crow"><span class="ctp ${c.tc}">${c.t}</span><span class="curl">${c.u}</span></div>`).join('');
-    dr.innerHTML=`<td colspan="6" class="dtd"><div class="dbody"><div class="dsec"><span class="dstl">Brands mentioned</span>${brands}</div><div class="dsec"><span class="dstl">Auto-tagged topics</span><div class="twrap">${topics}</div></div><div class="dsec"><span class="dstl">LLM response</span><div class="ptabs" id="pt${d.id}"><button class="ptab active" onclick="sw(event,${d.id},'chatgpt')">ChatGPT</button><button class="ptab" onclick="sw(event,${d.id},'perplexity')">Perplexity</button><button class="ptab" onclick="sw(event,${d.id},'gemini')">Gemini</button></div><div class="rbox" id="rb${d.id}">${d.resp.chatgpt}</div></div><div class="dsec"><span class="dstl">Citations used</span>${cits}</div></div></td>`;
+    dr.innerHTML=`<td colspan="6" class="dtd"><div class="dbody"><div class="dsec"><span class="dstl">Brands mentioned</span>${brands}</div><div class="dsec"><span class="dstl">Auto-tagged topics</span><div class="twrap">${topics}</div></div><div class="dsec"><span class="dstl">Citations used</span>${cits}</div><div class="dsec"><span class="dstl">LLM response</span><div class="ptabs" id="pt${d.id}"><button class="ptab active" onclick="sw(event,${d.id},'chatgpt')">ChatGPT</button><button class="ptab" onclick="sw(event,${d.id},'perplexity')">Perplexity</button><button class="ptab" onclick="sw(event,${d.id},'gemini')">Gemini</button></div><div class="rbox" id="rb${d.id}" style="max-height:60px;overflow:hidden">${d.resp.chatgpt}</div><span style="font-size:11px;color:var(--indigo);cursor:pointer;margin-top:4px;display:inline-block" onclick="event.stopPropagation();this.previousElementSibling.style.maxHeight='none';this.style.display='none'">Read more</span></div></div></td>`;
     document.getElementById('tb').appendChild(dr);
   });
 }
+function build(f){
+  buildFromData(P.filter(d=>f==='all'||d.sig===f));
+}
+
 function toggle(id){
   const o=document.getElementById('dr'+id).classList.contains('open');
   document.querySelectorAll('.drow').forEach(r=>r.classList.remove('open'));
@@ -1137,7 +1329,312 @@ buildCitHM('you');
 buildCitTable(CITS);
 buildBrandTable();
 // Init chart on load since overview is default page
-window.addEventListener('load',()=>{initChart();chartInited=true;});
+window.addEventListener('load',()=>{
+  initChart(); chartInited=true;
+  buildCitGroupedBars();
+  buildRecSections();
+  buildCitShare();
+});
+
+
+/* ══════════════════════════════════════════
+   RECOMMENDATIONS
+══════════════════════════════════════════ */
+const REC_DATA=[
+  {id:'p1',url:'/blog/hubspot-vs-competitors',gscRank:4,gscImpressions:'1.2k/mo',roiPrompts:3,
+   steps:[
+    {s:'done',t:'Page matched to 3 prompts',matches:[{intent:'Alternatives & comparisons',text:'Best alternatives to HubSpot for small teams'},{intent:'Alternatives & comparisons',text:'HubSpot alternatives under $50/mo'},{intent:'Is it worth it?',text:'Is HubSpot worth it for a 10-person team?'}]},
+    {s:'done',t:'Citations checked across all 3 prompts',chips:[{l:'Your page: 0 citations',c:'bad'},{l:'Competitor A: 44%',c:'bad'},{l:'Competitor B: 24%',c:'bad'}]},
+    {s:'active',t:'What cited pages do differently',chips:[{l:'Lead with a direct verdict',c:'warn'},{l:'Comparison table above the fold',c:'warn'},{l:'Named winner in first paragraph',c:'warn'}]},
+   ],
+   action:{note:'Restructure the intro — state a winner upfront. One fix, three prompt gaps closed.'},
+   fix:{loadingSteps:['Fetching page content…','Reading competitor pages…','Identifying citation patterns…','Drafting rewrite…'],sectionLabel:'Intro paragraph',
+    before:`HubSpot is one of the most popular CRM platforms on the market, offering a wide range of tools for marketing, sales, and customer service teams. In this post, we'll explore some of the top alternatives available, looking at pricing, features, and use cases to help you find the right fit for your team.`,
+    after:`<span class="diff-new">The best HubSpot alternative for small teams is Pipedrive — it costs a fraction of the price and covers everything a team under 20 needs.</span> If you're evaluating options, here's how the top alternatives stack up on price, ease of setup, and the features that actually matter at small-team scale.`,
+    afterClean:`The best HubSpot alternative for small teams is Pipedrive — it costs a fraction of the price and covers everything a team under 20 needs. If you're evaluating options, here's how the top alternatives stack up on price, ease of setup, and the features that actually matter at small-team scale.`,
+    rewrites:{'shorter':`Pipedrive is the best HubSpot alternative for small teams — lower cost, less complexity. Here's how the top options compare.`,'more formal':`For small teams evaluating CRM alternatives, Pipedrive represents the strongest value proposition relative to HubSpot.`,'lead with pricing':`HubSpot's Starter plan begins at $50/month per seat — most small teams don't need that. The best alternatives start from $15/month.`,'default':`The best HubSpot alternative for small teams is Pipedrive — it costs a fraction of the price and covers everything a team under 20 needs.`}}
+  },
+  {id:'p2',url:'/blog/intercom-vs-zendesk',gscRank:2,gscImpressions:'3.4k/mo',roiPrompts:2,
+   steps:[
+    {s:'done',t:'Page matched to 2 prompts',matches:[{intent:'Alternatives & comparisons',text:'Intercom vs Zendesk for support teams'},{intent:'Best in category',text:'Best customer support tools for SaaS'}]},
+    {s:'done',t:'Citations checked',chips:[{l:'You: 11%',c:'warn'},{l:'G2: 64%',c:'bad'},{l:'Editorial: 29%',c:'bad'}]},
+    {s:'active',t:'What cited pages do differently',chips:[{l:'Cited on ChatGPT · absent on Perplexity',c:'warn'},{l:'No comparison table on your page',c:'warn'}]},
+   ],
+   action:{note:'Add a comparison table near the top — Perplexity strongly favours structured data.'},
+   fix:{loadingSteps:['Fetching page content…','Checking Perplexity citation patterns…','Drafting table structure…'],sectionLabel:'Opening section',
+    before:`Intercom and Zendesk are two of the leading customer support platforms. Both offer ticketing, live chat, and automation features, but they differ significantly in pricing and target audience.`,
+    after:`<span class="diff-new">Intercom vs Zendesk — quick verdict: Intercom suits product-led SaaS teams that want in-app messaging; Zendesk is better for high-volume support operations.</span>`,
+    afterClean:`Intercom vs Zendesk — quick verdict: Intercom suits product-led SaaS teams that want in-app messaging; Zendesk is better for high-volume support operations.`,
+    rewrites:{'shorter':'Intercom = in-app chat for SaaS. Zendesk = high-volume ticketing.','more formal':'Intercom and Zendesk serve distinct support use cases. Intercom is optimised for product-led growth; Zendesk for high-volume ticket management.','default':'Intercom vs Zendesk — quick verdict: Intercom suits product-led SaaS; Zendesk suits high-volume support.'}}
+  },
+  {id:'p3',url:'/blog/notion-for-marketing',gscRank:7,gscImpressions:'840/mo',roiPrompts:2,
+   steps:[
+    {s:'done',t:'Page matched to 2 prompts',matches:[{intent:'Is it worth it?',text:'Is Notion worth it for small marketing teams?'},{intent:'Best in category',text:'Best tools for marketing teams under 20 people'}]},
+    {s:'done',t:'Citations checked',chips:[{l:'You: 0 citations',c:'bad'},{l:'Competitor: 71%',c:'bad'}]},
+    {s:'done',t:'What cited pages do differently',chips:[{l:'Lead with a verdict in the headline',c:'warn'},{l:'Direct answer before supporting detail',c:'warn'}]},
+   ],
+   action:{note:'Add a direct verdict in the headline — answer "is it worth it" before anything else.'},
+   fix:{loadingSteps:['Fetching page content…','Analysing competitor headlines…','Rewriting headline and intro…'],sectionLabel:'Headline + intro',
+    before:`Notion for Marketing Teams: A Complete Guide\n\nNotion has become increasingly popular among marketing teams of all sizes. In this guide, we'll look at how marketing teams are using Notion, what features are most useful, and whether it's the right tool for your team.`,
+    after:`<span class="diff-new">Is Notion worth it for small marketing teams? Yes — if your team is under 20 and you're tired of switching between five tools.</span>\n\nNotion replaces your wiki, project tracker, and brief templates in one place. <span class="diff-new">Here's an honest look at where it earns its cost, and where it falls short.</span>`,
+    afterClean:`Is Notion worth it for small marketing teams? Yes — if your team is under 20 and you're tired of switching between five tools.\n\nNotion replaces your wiki, project tracker, and brief templates in one place. Here's an honest look at where it earns its cost, and where it falls short.`,
+    rewrites:{'shorter':`Is Notion worth it for small marketing teams? Yes — if you're under 20 people.`,'more formal':'For small marketing teams, Notion provides a consolidated workspace that reduces tool overhead.','lead with pricing':`Notion costs $16/person/month. For a 10-person team, that's $160/month. Here's whether that's worth it.`,'default':`Is Notion worth it for small marketing teams? Yes — if your team is under 20 and you're tired of switching between five tools.`}}
+  },
+];
+
+function recIcon(s){
+  if(s==='done')return`<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  if(s==='active')return`<svg class="pulsing" width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="2.5" fill="currentColor"/></svg>`;
+  return`<svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="2.5" fill="currentColor" opacity=".2"/></svg>`;
+}
+function buildRecSections(){
+  const total=REC_DATA.reduce((a,p)=>a+p.roiPrompts,0);
+  const rows=REC_DATA.map(p=>{
+    const meta=`<span class="rec-gsc">GSC #${p.gscRank}</span><span style="color:var(--subtle)">·</span><span>${p.gscImpressions} impressions</span>`;
+    const steps=p.steps.map(s=>`
+      <div class="rec-step">
+        <div class="rsi rsi-${s.s}">${recIcon(s.s)}</div>
+        <div class="rec-step-body">
+          <div class="rec-step-title">${s.t}</div>
+          ${s.matches?`<div class="pm-list">${s.matches.map(m=>`<div class="pm-item"><span class="pm-intent">${m.intent}</span><span class="pm-text">${m.text}</span></div>`).join('')}</div>`:''}
+          ${s.chips&&s.chips.length?`<div class="rchips">${s.chips.map(c=>`<span class="rchip rc-${c.c}">${c.l}</span>`).join('')}</div>`:''}
+        </div>
+      </div>`).join('');
+    return`<div class="rec-row" id="rec-row-${p.id}">
+      <div class="rec-row-top" onclick="toggleRecRow('${p.id}')">
+        <div><div class="rec-page-url">${p.url}</div><div class="rec-page-meta">${meta}</div></div>
+        <div class="roi-pill">Opportunity across ${p.roiPrompts} prompt${p.roiPrompts>1?'s':''}</div>
+        <span class="rec-chev">›</span>
+      </div>
+      <div class="rec-drawer">
+        <div class="rec-steps">${steps}</div>
+        <div class="rec-action-bar">
+          <div class="rec-action-note">${p.action.note}</div>
+          <div style="display:flex;gap:6px">
+            <button class="rec-abtn primary" id="rec-abtn-${p.id}" onclick="openRecPanel('${p.id}')">Fix this page</button>
+            <button class="rec-abtn">Dismiss</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('rec-sections').innerHTML=`
+    <div class="rec-section">
+      <div class="rec-sec-head">
+        <div class="rec-sec-dot" style="background:#4F46E5"></div>
+        <div class="rec-sec-titles">
+          <div class="rec-sec-name">Optimise existing page</div>
+          <div class="rec-sec-desc">Each fix targets only the section preventing citation — your search ranking is preserved</div>
+        </div>
+        <span class="rec-sec-badge" style="background:#eef2ff;color:#3730a3">${REC_DATA.length} pages · ${total} prompts</span>
+      </div>
+      <div class="rec-tbl-head"><span>Page</span><span>Opportunity</span><span></span></div>
+      ${rows}
+    </div>`;
+}
+function toggleRecRow(id){
+  const row=document.getElementById('rec-row-'+id);
+  row.classList.toggle('open');
+}
+
+let currentFix=null,currentAfterClean='';
+function openRecPanel(id){
+  const p=REC_DATA.find(x=>x.id===id);
+  if(!p||!p.fix)return;
+  currentFix=p.fix; currentAfterClean=p.fix.afterClean;
+  document.getElementById('rp-page-label').textContent=p.url;
+  document.getElementById('rp-seo-text').textContent=`GSC rank #${p.gscRank} protected — fix targets ${p.fix.sectionLabel.toLowerCase()} only`;
+  document.getElementById('rp-loading').style.display='flex';
+  document.getElementById('rp-diff').classList.remove('on');
+  document.getElementById('rp-footer').style.display='none';
+  document.getElementById('rp-chat-hist').innerHTML='';
+  document.getElementById('rp-chat-in').value='';
+  document.getElementById('rp-approve').textContent='Approve & copy';
+  document.getElementById('rp-approve').className='rpf-btn primary';
+  const log=document.getElementById('rp-log');
+  log.innerHTML=p.fix.loadingSteps.map((s,i)=>`<div class="rp-ll idle" id="rll-${i}"><div class="rp-lld"></div>${s}</div>`).join('');
+  document.getElementById('rec-overlay').classList.add('on');
+  document.getElementById('rec-panel').classList.add('on');
+  p.fix.loadingSteps.forEach((_,i)=>{
+    setTimeout(()=>{
+      document.querySelectorAll('[id^="rll-"]').forEach(el=>el.classList.remove('active'));
+      const el=document.getElementById('rll-'+i);
+      if(el){el.classList.remove('idle');el.classList.add('active');}
+      if(i>0){const prev=document.getElementById('rll-'+(i-1));if(prev){prev.classList.remove('active');prev.classList.add('done');}}
+    },i*600);
+  });
+  const total=p.fix.loadingSteps.length*600+300;
+  setTimeout(()=>{
+    const last=document.getElementById('rll-'+(p.fix.loadingSteps.length-1));
+    if(last){last.classList.remove('active');last.classList.add('done');}
+    setTimeout(()=>{
+      document.getElementById('rp-loading').style.display='none';
+      document.getElementById('rp-before').innerHTML=`<div class="rp-sec-lbl">${p.fix.sectionLabel}</div><div class="rp-text before">${p.fix.before.replace(/\n/g,'<br>')}</div>`;
+      document.getElementById('rp-after').innerHTML=`<div class="rp-sec-lbl">${p.fix.sectionLabel}</div><div class="rp-text after">${p.fix.after.replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>')}</div>`;
+      document.getElementById('rp-diff').classList.add('on');
+      document.getElementById('rp-footer').style.display='flex';
+    },300);
+  },total);
+}
+function closeRecPanel(){
+  document.getElementById('rec-overlay').classList.remove('on');
+  document.getElementById('rec-panel').classList.remove('on');
+}
+function sendRecChat(){
+  const input=document.getElementById('rp-chat-in');
+  const msg=input.value.trim();
+  if(!msg||!currentFix)return;
+  const hist=document.getElementById('rp-chat-hist');
+  hist.innerHTML+=`<div class="chat-msg user">${msg}</div>`;
+  input.value='';
+  document.getElementById('rp-send').disabled=true;
+  const tid='rt-'+Date.now();
+  hist.innerHTML+=`<div class="chat-msg agent" id="${tid}">Rewriting…</div>`;
+  hist.scrollTop=hist.scrollHeight;
+  setTimeout(()=>{
+    const lower=msg.toLowerCase();
+    let key='default';
+    for(const k of Object.keys(currentFix.rewrites)){if(k!=='default'&&lower.includes(k)){key=k;break;}}
+    const newText=currentFix.rewrites[key]||currentFix.rewrites['default'];
+    currentAfterClean=newText;
+    document.getElementById(tid).textContent=`Updated — tried "${key==='default'?msg:key}".`;
+    hist.scrollTop=hist.scrollHeight;
+    document.getElementById('rp-after').innerHTML=`<div class="rp-sec-lbl">${currentFix.sectionLabel}</div><div class="rp-text after">${newText.replace(/\n\n/g,'<br><br>')}</div>`;
+    document.getElementById('rp-send').disabled=false;
+  },900);
+}
+document.getElementById('rp-chat-in').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendRecChat();}});
+function approveRecEdit(){
+  navigator.clipboard.writeText(currentAfterClean).catch(()=>{});
+  const btn=document.getElementById('rp-approve');
+  btn.textContent='✓ Copied to clipboard';
+  btn.className='rpf-btn success';
+}
+
+/* ══════ GROUPED BARS: Citation appearances ══════ */
+const CIT_APP=[
+  {label:'G2 / Capterra',    responses:287, you:52, compb:126, compa:63, others:46},
+  {label:'Alt directories',  responses:152, you:12, compb:43,  compa:79, others:18},
+  {label:'Reddit / community',responses:118, you:28, compb:21,  compa:45, others:24},
+  {label:'Editorial blogs',  responses:84,  you:26, compb:24,  compa:20, others:14},
+  {label:'Owned content',    responses:62,  you:9,  compb:19,  compa:14, others:20},
+];
+function buildCitGroupedBars(){
+  const wrap=document.getElementById('cit-grouped-bars');
+  if(!wrap)return;
+  const colors={you:'#3730a3',compb:'#818cf8',compa:'#c7d2fe',others:'#e0e7ff'};
+  const labels={you:'You',compb:'Comp B',compa:'Comp A',others:'Others'};
+  wrap.innerHTML='';
+  CIT_APP.forEach(d=>{
+    const maxVal=Math.max(d.you,d.compb,d.compa,d.others);
+    const div=document.createElement('div');
+    div.style.cssText='display:flex;align-items:flex-start;gap:14px;margin-bottom:14px';
+    const nameDiv=`<div style="width:148px;flex-shrink:0;font-size:12px;font-weight:500;padding-top:2px">${d.label}</div>`;
+    const freqDiv=`<div style="width:80px;flex-shrink:0;font-size:11px;color:var(--muted);padding-top:2px">${d.responses} responses</div>`;
+    const bars=['you','compb','compa','others'].map(k=>`
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+        <div style="width:52px;font-size:10px;color:var(--muted)">${labels[k]}</div>
+        <div style="flex:1;height:12px;background:#f1f5f9;border-radius:3px;overflow:hidden">
+          <div style="width:${Math.round(d[k]/maxVal*100)}%;height:100%;background:${colors[k]};border-radius:3px"></div>
+        </div>
+        <div style="width:28px;text-align:right;font-size:10px;font-weight:600;color:var(--slate)">${d[k]}</div>
+      </div>`).join('');
+    div.innerHTML=nameDiv+freqDiv+`<div style="flex:1">${bars}</div>`;
+    wrap.appendChild(div);
+  });
+}
+
+/* ══════ SHARE OF VOICE chart ══════ */
+const SOV_DATA=[
+  {intent:'Alternatives',     you:21,compb:35,compa:28,compc:16},
+  {intent:'Best in category', you:18,compb:32,compa:31,compc:19},
+  {intent:'Works with',       you:27,compb:24,compa:29,compc:20},
+  {intent:'Solve a problem',  you:19,compb:28,compa:33,compc:20},
+  {intent:'Is it worth it?',  you:12,compb:38,compa:30,compc:20},
+];
+function buildSOVChart(){
+  const wrap=document.getElementById('sov-wrap');
+  if(!wrap)return;
+  const colors={you:'#3730a3',compb:'#818cf8',compa:'#c7d2fe',compc:'#e0e7ff'};
+  const names={you:'You',compb:'Comp B',compa:'Comp A',compc:'Comp C'};
+  wrap.innerHTML='';
+  SOV_DATA.forEach(d=>{
+    const maxVal=Math.max(d.you,d.compb,d.compa,d.compc);
+    const div=document.createElement('div');
+    div.style.cssText='display:flex;align-items:flex-start;gap:14px;margin-bottom:14px';
+    const nameDiv=`<div style="width:140px;flex-shrink:0;font-size:12px;font-weight:500;padding-top:2px">${d.intent}</div>`;
+    const bars=['you','compb','compa','compc'].map(k=>`
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+        <div style="width:52px;font-size:10px;color:var(--muted)">${names[k]}</div>
+        <div style="flex:1;height:12px;background:#f1f5f9;border-radius:3px;overflow:hidden">
+          <div style="width:${Math.round(d[k]/maxVal*100)}%;height:100%;background:${colors[k]};border-radius:3px"></div>
+        </div>
+        <div style="width:28px;text-align:right;font-size:10px;font-weight:600;color:var(--slate)">${d[k]}%</div>
+      </div>`).join('');
+    div.innerHTML=nameDiv+`<div style="flex:1">${bars}</div>`;
+    wrap.appendChild(div);
+  });
+}
+
+/* ══════ PROMPTS: search + intent filter ══════ */
+let pSearchQ='', pIntentF='all', pSigF='all';
+function searchP(v){pSearchQ=v.toLowerCase();buildFiltered();}
+function applyPF(){pIntentF=document.getElementById('p-intent').value;buildFiltered();}
+function buildFiltered(){
+  // re-filter using existing build() but with extra filters
+  const filtered=P.filter(d=>{
+    if(pSigF!=='all'&&d.sig!==pSigF)return false;
+    if(pIntentF!=='all'&&d.intent!==pIntentF)return false;
+    if(pSearchQ){
+      const hay=(d.text+' '+d.topics.join(' ')+' '+d.brands.map(b=>b.n).join(' ')).toLowerCase();
+      if(!hay.includes(pSearchQ))return false;
+    }
+    return true;
+  });
+  buildFromData(filtered);
+}
+
+/* patch ft() to also store sig filter */
+const _origFt=ft;
+function ft(btn,f){pSigF=f;_origFt(btn,f);}
+
+/* ══════ CITATIONS: search ══════ */
+let citSearchQ='';
+function searchCit(v){citSearchQ=v.toLowerCase();filterCit();}
+const _origFilterCit=filterCit;
+function filterCit(){
+  const i=document.getElementById('fCI').value,s=document.getElementById('fCS').value;
+  buildCitTable(CITS.filter(d=>{
+    if(i!=='all'&&d.intent!==i)return false;
+    if(s!=='all'&&d.stype!==s)return false;
+    if(citSearchQ&&!(d.url.toLowerCase().includes(citSearchQ)||d.comp.toLowerCase().includes(citSearchQ)))return false;
+    return true;
+  }));
+}
+
+
+function buildCitShare(){
+  var wrap=document.getElementById('cit-share-wrap');
+  if(!wrap)return;
+  var data=[
+    {label:'G2 / Capterra', pct:38},
+    {label:'Owned content',  pct:22},
+    {label:'Reddit',         pct:18},
+    {label:'Editorial',      pct:14},
+    {label:'Alt directories',pct:8},
+  ];
+  wrap.innerHTML='';
+  data.forEach(function(d){
+    var row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:12px;margin-bottom:8px';
+    row.innerHTML='<div style="width:130px;flex-shrink:0;font-size:12px;font-weight:500">'+d.label+'</div>'
+      +'<div style="flex:1;height:22px;background:#f1f5f9;border-radius:5px;overflow:hidden">'
+      +'<div style="width:'+d.pct+'%;height:100%;background:#4F46E5;border-radius:5px;display:flex;align-items:center;padding-left:8px">'
+      +'<span style="font-size:11px;font-weight:600;color:#fff">'+d.pct+'%</span>'
+      +'</div></div>';
+    wrap.appendChild(row);
+  });
+}
 </script>
 </body>
 </html>
