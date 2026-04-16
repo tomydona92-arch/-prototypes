@@ -8,25 +8,31 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f0ede8;--white:#fff;--border:#e8e5e0;
+  --bg:#ffffff;--white:#fff;--border:#e8e5e0;
   --text:#1a1a1a;--muted:#6b7280;--subtle:#9ca3af;
-  --indigo:#4F46E5;--indigo-l:#eef2ff;--slate:#1e293b;
-  --h5:#3730a3;--h4:#4F46E5;--h3:#818cf8;--h2:#c7d2fe;--h1:#e0e7ff;
+  --indigo:#FF5A1F;--indigo-l:#fff4f0;--slate:#1e293b;
+  --h5:#cc4100;--h4:#FF5A1F;--h3:#ff8c5a;--h2:#ffd4c2;--h1:#ffe8de;
 }
 body{background:var(--bg);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text)}
 .shell{display:flex;height:100vh}
 
 /* sidebar */
-.sidebar{width:196px;flex-shrink:0;background:var(--white);border-right:1px solid var(--border);padding:20px 0}
-.logo{padding:0 18px 24px;font-size:15px;font-weight:700}
-.logo span{color:var(--indigo)}
-.nav-lbl{padding:6px 18px;font-size:10px;font-weight:600;color:var(--subtle);letter-spacing:.08em;text-transform:uppercase}
-.ni{padding:7px 18px;display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);cursor:pointer;border-left:2px solid transparent}
-.ni:hover{background:#f9f8f6}
-.ni.active{color:var(--indigo);font-weight:600;background:var(--indigo-l);border-left-color:var(--indigo)}
+.sidebar{width:220px;flex-shrink:0;background:#f2f2f2;border-right:1px solid #e4e4e4;padding:20px 12px;color:#1a1a1a;overflow-y:auto}
+.logo-avatar{width:36px;height:36px;border-radius:9px;background:#cc4100;color:#fff;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-bottom:16px}
+.sidebar-greeting{padding:0 6px 20px}
+.sidebar-greeting-sub{font-size:12px;color:#9ca3af;margin-bottom:2px}
+.sidebar-greeting-name{font-size:17px;font-weight:700;color:#1a1a1a}
+.nav-section-header{padding:6px 8px 6px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin-bottom:4px}
+.nav-section-title{font-size:13px;font-weight:600;color:#1a1a1a}
+.nav-section-chevron{font-size:14px;color:#9ca3af;line-height:1}
+.nav-lbl{padding:6px 8px 4px;font-size:10px;font-weight:600;color:#9ca3af;letter-spacing:.08em;text-transform:uppercase}
+.ni{padding:9px 12px;display:flex;align-items:center;gap:10px;font-size:13px;color:#6b7280;cursor:pointer;border-radius:10px;margin-bottom:2px;border:1px solid transparent}
+.ni:hover{background:#e8e8e8}
+.ni.active{color:#1a1a1a;font-weight:500;background:#ffffff;border-color:#e4e4e4;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+.ni-icon{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
 
 /* pages */
-.page{display:none;flex:1;overflow-y:auto;padding:28px 28px 48px}
+.page{display:none;flex:1;overflow-y:auto;height:100%;padding:28px 28px 48px}
 .page.active{display:block}
 .ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px}
 .pt{font-size:20px;font-weight:700;color:var(--slate)}
@@ -113,11 +119,11 @@ tbody tr.dr.open{background:#faf9f7}
 tbody td{padding:12px 14px;vertical-align:middle}
 .ptxt{font-weight:500;font-size:13px}
 .itag{display:inline-block;margin-top:4px;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:600}
-.it-alt{background:#eef2ff;color:#4338ca}
+.it-alt{background:#fff4f0;color:#4338ca}
 .it-best{background:#ede9fe;color:#6d28d9}
-.it-wrk{background:#e0e7ff;color:#3730a3}
+.it-wrk{background:#ffe8de;color:#cc4100}
 .it-prb{background:#e8eaf6;color:#3949ab}
-.it-wrt{background:#f0f4ff;color:#4F46E5}
+.it-wrt{background:#f0f4ff;color:#FF5A1F}
 .met{font-weight:600;font-size:13px;color:#1a1a1a}
 .mg{color:#166534}.mm{color:var(--muted)}.mb{color:var(--muted)}.mn{color:var(--subtle)}
 .albl{font-size:10px;color:var(--subtle);margin-left:3px}
@@ -166,10 +172,10 @@ tbody td{padding:12px 14px;vertical-align:middle}
 .sfrq{width:80px;flex-shrink:0;font-size:11px;color:var(--muted)}
 .sbw{flex:1;height:24px;border-radius:5px;overflow:hidden;display:flex;background:#f1f5f9}
 .ss{height:100%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600}
-.s-you{background:#3730a3;color:#fff}
-.s-cb{background:#818cf8;color:#fff}
-.s-ca{background:#c7d2fe;color:var(--slate)}
-.s-ot{background:#e0e7ff;color:var(--slate)}
+.s-you{background:#cc4100;color:#fff}
+.s-cb{background:#ff8c5a;color:#fff}
+.s-ca{background:#ffd4c2;color:var(--slate)}
+.s-ot{background:#ffe8de;color:var(--slate)}
 .sleg{display:flex;gap:16px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
 .sl{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
 .ssw{width:10px;height:10px;border-radius:2px}
@@ -277,10 +283,10 @@ tbody td{padding:12px 14px;vertical-align:middle}
 .rp-close:hover{background:#f3f4f6}
 .rp-seo-bar{padding:8px 18px;background:var(--green-bg,#f0fdf4);border-bottom:1px solid var(--green-border,#bbf7d0);display:flex;align-items:center;gap:6px;flex-shrink:0}
 .rp-loading{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:32px}
-.rp-spinner{width:20px;height:20px;border:2px solid #c7d2fe;border-top-color:#4F46E5;border-radius:50%;animation:spin-r .7s linear infinite}
+.rp-spinner{width:20px;height:20px;border:2px solid #ffd4c2;border-top-color:#FF5A1F;border-radius:50%;animation:spin-r .7s linear infinite}
 .rp-log{display:flex;flex-direction:column;gap:5px;margin-top:12px;width:100%;max-width:320px}
 .rp-ll{font-size:12px;display:flex;align-items:center;gap:7px}
-.rp-ll.done{color:#166534}.rp-ll.active{color:#4F46E5}.rp-ll.idle{color:var(--subtle)}
+.rp-ll.done{color:#166534}.rp-ll.active{color:#FF5A1F}.rp-ll.idle{color:var(--subtle)}
 .rp-lld{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
 .rp-diff{flex:1;display:none;flex-direction:column;overflow:hidden}
 .rp-diff.on{display:flex}
@@ -300,19 +306,19 @@ tbody td{padding:12px 14px;vertical-align:middle}
 .rp-chat{flex-shrink:0;border-top:1px solid var(--border);background:var(--white)}
 .rp-chat-hist{max-height:120px;overflow-y:auto;padding:8px 14px 0;display:flex;flex-direction:column;gap:6px}
 .chat-msg{font-size:12px;line-height:1.5;padding:6px 10px;border-radius:6px;max-width:85%}
-.chat-msg.user{background:#eef2ff;color:#3730a3;align-self:flex-end}
+.chat-msg.user{background:#fff4f0;color:#cc4100;align-self:flex-end}
 .chat-msg.agent{background:#f3f4f6;color:var(--muted);align-self:flex-start}
 .rp-chat-row{display:flex;align-items:center;gap:8px;padding:10px 14px}
 .rp-chat-in{flex:1;font-size:13px;font-family:inherit;border:1px solid var(--border);border-radius:6px;padding:8px 12px;outline:none;resize:none;line-height:1.4}
-.rp-chat-in:focus{border-color:#c7d2fe}
+.rp-chat-in:focus{border-color:#ffd4c2}
 .rp-chat-in::placeholder{color:var(--subtle)}
-.rp-send{width:32px;height:32px;border-radius:6px;background:#4F46E5;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rp-send{width:32px;height:32px;border-radius:6px;background:#FF5A1F;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .rp-send:hover{background:#4338ca}.rp-send:disabled{opacity:.4;cursor:not-allowed}
 .rp-send svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .rp-footer{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;background:#fafaf8}
 .rpf-btn{padding:8px 0;border-radius:6px;font-size:13px;font-family:inherit;cursor:pointer;font-weight:600;border:1px solid var(--border);background:var(--white);color:var(--text,#1a1a1a);flex:1;text-align:center}
-.rpf-btn:hover{background:#f0ede8}
-.rpf-btn.primary{background:#4F46E5;color:#fff;border-color:#4F46E5}
+.rpf-btn:hover{background:#ffffff}
+.rpf-btn.primary{background:#FF5A1F;color:#fff;border-color:#FF5A1F}
 .rpf-btn.primary:hover{background:#4338ca}
 .rpf-btn.success{background:#f0fdf4;color:#166534;border-color:#bbf7d0}
 .rec-section{background:var(--white);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden}
@@ -332,7 +338,7 @@ tbody td{padding:12px 14px;vertical-align:middle}
 .rec-page-url{font-size:13px;font-weight:500}
 .rec-page-meta{font-size:12px;color:var(--muted);margin-top:2px;display:flex;align-items:center;gap:6px}
 .rec-gsc{font-size:11px;padding:1px 7px;border-radius:4px;background:#f3f4f6;color:var(--muted)}
-.roi-pill{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;background:var(--indigo-l);color:#3730a3;border:1px solid #c7d2fe}
+.roi-pill{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;background:var(--indigo-l);color:#cc4100;border:1px solid #ffd4c2}
 .rec-chev{color:var(--subtle);font-size:16px;transition:transform .2s;line-height:1}
 .rec-row.open .rec-chev{transform:rotate(90deg)}
 .rec-drawer{display:none;border-top:1px solid var(--border);background:#fafaf9}
@@ -343,33 +349,65 @@ tbody td{padding:12px 14px;vertical-align:middle}
 .rec-step:last-child::after{display:none}
 .rsi{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1;margin-top:2px}
 .rsi-done{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}
-.rsi-active{background:#eef2ff;border:1px solid #c7d2fe;color:#4F46E5}
+.rsi-active{background:#fff4f0;border:1px solid #ffd4c2;color:#FF5A1F}
 .rsi-idle{background:#f3f4f6;border:1px solid var(--border);color:var(--subtle)}
 .rec-step-body{flex:1}
 .rec-step-title{font-size:12px;font-weight:600}
 .rec-step-note{font-size:12px;color:var(--muted);margin-top:1px;line-height:1.5}
 .pm-list{display:flex;flex-direction:column;gap:4px;margin-top:6px}
 .pm-item{display:flex;align-items:flex-start;gap:6px;padding:6px 10px;background:var(--white);border:1px solid var(--border);border-radius:6px}
-.pm-intent{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;background:#eef2ff;color:#3730a3;white-space:nowrap;flex-shrink:0;margin-top:1px}
+.pm-intent{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;background:#fff4f0;color:#cc4100;white-space:nowrap;flex-shrink:0;margin-top:1px}
 .pm-text{font-size:12px;line-height:1.4}
 .rchips{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
 .rchip{font-size:11px;padding:2px 7px;border-radius:4px}
 .rc-n{background:#f3f4f6;color:var(--muted)}
 .rc-bad{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
 .rc-warn{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
-.rc-good{background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe}
+.rc-good{background:#fff4f0;color:#cc4100;border:1px solid #ffd4c2}
 .rec-action-bar{border-top:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;background:var(--white)}
 .rec-action-note{font-size:12px;color:var(--muted);flex:1;font-style:italic;line-height:1.5}
 .rec-abtn{padding:7px 16px;border-radius:6px;font-size:12px;font-family:inherit;cursor:pointer;font-weight:600;border:1px solid var(--border);background:var(--white);transition:all .15s;white-space:nowrap}
-.rec-abtn:hover{background:#f0ede8}
-.rec-abtn.primary{background:#4F46E5;color:#fff;border-color:#4F46E5}
+.rec-abtn:hover{background:#ffffff}
+.rec-abtn.primary{background:#FF5A1F;color:#fff;border-color:#FF5A1F}
 .rec-abtn.primary:hover{background:#4338ca}
 .rec-abtn:disabled{opacity:.5;cursor:not-allowed}
+.cit-src-tab{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--white);font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;font-family:inherit;transition:all .15s}
+.cit-src-tab:hover{background:#f5f5f5;color:var(--text)}
+.cit-src-tab.active{background:var(--indigo);color:#fff;border-color:var(--indigo)}
 .nudge-bar{background:var(--indigo-l);border:1px solid var(--h2);border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
 .nudge-text{font-size:12px;color:var(--h5)}
 .nudge-btn{background:var(--indigo);color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0}
 .nudge-btn:hover{background:#4338ca}
 
+
+
+/* ── control_room styles ── */
+.cr-buckets{display:flex;flex-direction:column;gap:16px;width:100%}
+.cr-bucket{flex:1;background:#ffffff;border:1px solid #e8e5e0;border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+
+/* Header */
+.cr-bhead{padding:18px 20px 16px;border-bottom:1px solid #e8e5e0}
+.cr-bhead-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2px}
+.cr-btitle{font-size:15px;font-weight:700;color:#1a1a1a}
+.cr-bcount{font-size:22px;font-weight:700;color:#FF5A1F;line-height:1}
+.cr-bsub{font-size:11px;color:#6b7280;margin-bottom:10px}
+.cr-gsc-badge{display:inline-flex;align-items:center;gap:5px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600;color:#166534}
+.cr-gsc-dot{width:5px;height:5px;border-radius:50%;background:#166534;flex-shrink:0}
+
+/* Diagnostics */
+.cr-diag-lbl{padding:10px 20px 6px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9ca3af}
+.cr-diag-rows{flex:1}
+.cr-drow{display:flex;align-items:center;gap:16px;padding:10px 20px;border-bottom:1px solid #f5f4f1}
+.cr-drow:last-child{border-bottom:none}
+.cr-dnum{width:32px;font-size:18px;font-weight:700;color:#1e293b;text-align:right;flex-shrink:0}
+.cr-ddesc{flex:1;font-size:12px;color:#6b7280;line-height:1.4}
+.cr-ddesc strong{color:#374151;font-weight:500}
+.dtrend{width:180px;flex-shrink:0;text-align:right;font-size:11px;color:#9ca3af;font-weight:400;line-height:1.4}
+
+/* Footer */
+.cr-bfoot{background:#fafaf8;border-top:1px solid #e8e5e0;padding:14px 20px}
+.cr-bfoot-btn{display:block;width:100%;background:#FF5A1F;color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;text-align:center}
+.cr-bfoot-btn:hover{background:#cc4100}
 </style>
 </head>
 <body>
@@ -377,18 +415,41 @@ tbody td{padding:12px 14px;vertical-align:middle}
 
 <!-- ═══ SIDEBAR ═══ -->
 <div class="sidebar">
-  <div class="logo">Strive<span>labs</span></div>
-  <div style="padding:4px 0">
-    <div class="nav-lbl">Workspace</div>
-    <div class="ni">⚡ Workforce</div>
-    <div class="ni">📋 Campaigns</div>
+  <div class="logo-avatar">D</div>
+  <div class="sidebar-greeting">
+    <div class="sidebar-greeting-sub">Good Afternoon</div>
+    <div class="sidebar-greeting-name">Dona</div>
   </div>
-  <div style="padding:4px 0">
-    <div class="nav-lbl">Analytics</div>
-    <div class="ni active" id="ni-overview" onclick="nav('overview')">🏠 Overview</div>
-    <div class="ni" id="ni-prompts"   onclick="nav('prompts')">🔍 Prompts</div>
-    <div class="ni" id="ni-citations" onclick="nav('citations')">🔗 Citations</div>
-    <div class="ni" id="ni-recommendations" onclick="nav('recommendations')">⚡ Recommendations</div>
+
+  <div>
+    <div class="nav-section-header">
+      <div class="nav-section-title">Answer Engine Optimization</div>
+      <div class="nav-section-chevron">&#8964;</div>
+    </div>
+    <div class="ni active" id="ni-overview" onclick="nav('overview')">
+      <div class="ni-icon">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1.5" fill="#FF5A1F"/><rect x="8" y="1" width="5" height="5" rx="1.5" fill="#FF5A1F"/><rect x="1" y="8" width="5" height="5" rx="1.5" fill="#FF5A1F"/><rect x="8" y="8" width="5" height="5" rx="1.5" fill="#FF5A1F"/></svg>
+      </div>
+      Overview
+    </div>
+    <div class="ni" id="ni-prompts" onclick="nav('prompts')">
+      <div class="ni-icon">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4" stroke="#9ca3af" stroke-width="1.5"/><path d="M9.5 9.5 L12 12" stroke="#9ca3af" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      Prompts
+    </div>
+    <div class="ni" id="ni-citations" onclick="nav('citations')">
+      <div class="ni-icon">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2 L3 4 L5 6" stroke="#9ca3af" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 8 L11 10 L9 12" stroke="#9ca3af" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 4 Q7 4 7 8 L11 10" stroke="#9ca3af" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+      </div>
+      Citations
+    </div>
+    <div class="ni" id="ni-actions" onclick="nav('actions')">
+      <div class="ni-icon">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7 L5 10 L12 3" stroke="#9ca3af" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      Content Actions
+    </div>
   </div>
 </div>
 
@@ -399,49 +460,27 @@ tbody td{padding:12px 14px;vertical-align:middle}
     <button class="btn-outline" onclick="exportData()">↓ Export data</button>
   </div>
 
-  <div class="kpi-strip" style="grid-template-columns:repeat(4,1fr)">
-    <div class="kpi">
-      <div class="kpi-lbl">AI Visibility</div>
-      <div class="kpi-val">21%</div>
-      <div class="kpi-d up">↑ 3pp vs last week</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-lbl">New citations this week</div>
-      <div class="kpi-val">14</div>
-      <div class="kpi-d up">↑ 3 vs last week</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-lbl">SEO × AEO opportunities</div>
-      <div class="kpi-val">7</div>
-      <div class="kpi-d nt">pages matched to prompt gaps</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-lbl">New content opportunities</div>
-      <div class="kpi-val">3</div>
-      <div class="kpi-d nt">identified this week</div>
-    </div>
-  </div>
 
   <div class="card">
     <div class="clbl">Share of voice — AI responses</div>
     <div class="lb-row">
       <div class="lb-rank">#1</div><div class="lb-name">Competitor B</div>
-      <div class="lb-bw"><div class="lb-bar" style="width:35%;background:#c7d2fe;color:var(--slate)">35%</div></div>
+      <div class="lb-bw"><div class="lb-bar" style="width:35%;background:#ffd4c2;color:var(--slate)">35%</div></div>
       <div class="lb-pct">35%</div>
     </div>
     <div class="lb-row">
       <div class="lb-rank">#2</div><div class="lb-name">Competitor A</div>
-      <div class="lb-bw"><div class="lb-bar" style="width:28%;background:#c7d2fe;color:var(--slate)">28%</div></div>
+      <div class="lb-bw"><div class="lb-bar" style="width:28%;background:#ffd4c2;color:var(--slate)">28%</div></div>
       <div class="lb-pct">28%</div>
     </div>
     <div class="lb-row">
       <div class="lb-rank" style="color:var(--indigo)">#3</div><div class="lb-name lb-you">You</div>
-      <div class="lb-bw"><div class="lb-bar" style="width:21%;background:#4F46E5">21%</div></div>
+      <div class="lb-bw"><div class="lb-bar" style="width:21%;background:#FF5A1F">21%</div></div>
       <div class="lb-pct" style="color:var(--indigo)">21%</div>
     </div>
     <div class="lb-row">
       <div class="lb-rank">#4</div><div class="lb-name">Competitor C</div>
-      <div class="lb-bw"><div class="lb-bar" style="width:16%;background:#e0e7ff;color:var(--slate)">16%</div></div>
+      <div class="lb-bw"><div class="lb-bar" style="width:16%;background:#ffe8de;color:var(--slate)">16%</div></div>
       <div class="lb-pct">16%</div>
     </div>
   </div>
@@ -467,7 +506,7 @@ tbody td{padding:12px 14px;vertical-align:middle}
     </div>
     <div class="chart-wrap"><canvas id="chart1"></canvas></div>
     <div class="cleg" id="c1leg">
-      <div class="cl"><div class="cs" style="background:#3730a3"></div> You</div>
+      <div class="cl"><div class="cs" style="background:#cc4100"></div> You</div>
     </div>
   </div>
 
@@ -482,9 +521,9 @@ tbody td{padding:12px 14px;vertical-align:middle}
     </div>
     <div class="chart-wrap"><canvas id="chart2"></canvas></div>
     <div class="cleg">
-      <div class="cl"><div class="cs" style="background:#818cf8"></div> ChatGPT</div>
+      <div class="cl"><div class="cs" style="background:#ff8c5a"></div> ChatGPT</div>
       <div class="cl"><div class="cs" style="background:#a5b4fc"></div> Perplexity</div>
-      <div class="cl"><div class="cs" style="background:#c7d2fe"></div> Gemini</div>
+      <div class="cl"><div class="cs" style="background:#ffd4c2"></div> Gemini</div>
     </div>
   </div>
 
@@ -514,7 +553,7 @@ tbody td{padding:12px 14px;vertical-align:middle}
     <div class="pleg">
       <div class="pl"><div class="psw" style="background:var(--h5)"></div> Winning</div>
       <div class="pl"><div class="psw" style="background:var(--h3)"></div> Watch</div>
-      <div class="pl"><div class="psw" style="background:var(--h1);border:1px solid #c7d2fe"></div> Gap</div>
+      <div class="pl"><div class="psw" style="background:var(--h1);border:1px solid #ffd4c2"></div> Gap</div>
     </div>
   </div>
 
@@ -528,11 +567,11 @@ tbody td{padding:12px 14px;vertical-align:middle}
       <div class="hm-leg">
         <span class="hml">Weaker</span>
         <div class="hmsc">
-          <div class="hmsw" style="background:#e0e7ff"></div>
-          <div class="hmsw" style="background:#c7d2fe"></div>
-          <div class="hmsw" style="background:#818cf8"></div>
-          <div class="hmsw" style="background:#4F46E5"></div>
-          <div class="hmsw" style="background:#3730a3"></div>
+          <div class="hmsw" style="background:#ffe8de"></div>
+          <div class="hmsw" style="background:#ffd4c2"></div>
+          <div class="hmsw" style="background:#ff8c5a"></div>
+          <div class="hmsw" style="background:#FF5A1F"></div>
+          <div class="hmsw" style="background:#cc4100"></div>
         </div>
         <span class="hml">Stronger</span>
         <span style="font-size:10px;color:var(--subtle);margin-left:10px">· Dashed = not tracked</span>
@@ -540,10 +579,7 @@ tbody td{padding:12px 14px;vertical-align:middle}
     </div>
   </div>
 
-  <div class="nudge-bar">
-    <div class="nudge-text">⚡ 8 of your Gap prompts may already have relevant content — fixing the page structure could close those gaps.</div>
-    <button class="nudge-btn" onclick="nav('recommendations')">View recommendations</button>
-  </div>
+
 
   <div class="tcard">
     <div class="tbar">
@@ -578,13 +614,22 @@ tbody td{padding:12px 14px;vertical-align:middle}
   </div>
 
   <div class="card">
-    <div class="clbl">Citation appearances by source type</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div class="clbl" style="margin-bottom:0">Citation appearances by source type</div>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap" id="cit-source-tabs">
+      <button class="cit-src-tab active" onclick="selectCitSource(this,'G2 / Capterra')">G2 / Capterra</button>
+      <button class="cit-src-tab" onclick="selectCitSource(this,'Alt directories')">Alt directories</button>
+      <button class="cit-src-tab" onclick="selectCitSource(this,'Reddit / community')">Reddit / community</button>
+      <button class="cit-src-tab" onclick="selectCitSource(this,'Editorial blogs')">Editorial blogs</button>
+      <button class="cit-src-tab" onclick="selectCitSource(this,'Owned content')">Owned content</button>
+    </div>
     <div id="cit-grouped-bars"></div>
-    <div class="sleg">
-      <div class="sl"><div class="ssw" style="background:#3730a3"></div> You</div>
-      <div class="sl"><div class="ssw" style="background:#818cf8"></div> Competitor B</div>
-      <div class="sl"><div class="ssw" style="background:#c7d2fe"></div> Competitor A</div>
-      <div class="sl"><div class="ssw" style="background:#e0e7ff;border:1px solid #c7d2fe"></div> Others</div>
+    <div class="sleg" style="margin-top:16px">
+      <div class="sl"><div class="ssw" style="background:#cc4100"></div> You</div>
+      <div class="sl"><div class="ssw" style="background:#ff8c5a"></div> Competitor B</div>
+      <div class="sl"><div class="ssw" style="background:#ffd4c2"></div> Competitor A</div>
+      <div class="sl"><div class="ssw" style="background:#ffe8de;border:1px solid #ffd4c2"></div> Others</div>
     </div>
   </div>
 
@@ -603,7 +648,7 @@ tbody td{padding:12px 14px;vertical-align:middle}
     <table class="hm-tbl" id="hmCGrid"></table>
     <div class="hm-leg">
       <span class="hml">No presence</span>
-      <div class="hmsc"><div class="hmsw" style="background:#e0e7ff"></div><div class="hmsw" style="background:#c7d2fe"></div><div class="hmsw" style="background:#818cf8"></div><div class="hmsw" style="background:#4F46E5"></div><div class="hmsw" style="background:#3730a3"></div></div>
+      <div class="hmsc"><div class="hmsw" style="background:#ffe8de"></div><div class="hmsw" style="background:#ffd4c2"></div><div class="hmsw" style="background:#ff8c5a"></div><div class="hmsw" style="background:#FF5A1F"></div><div class="hmsw" style="background:#cc4100"></div></div>
       <span class="hml">Strong presence</span>
       <span style="font-size:10px;color:var(--subtle);margin-left:10px">· Dashed = no citations found</span>
     </div>
@@ -628,10 +673,7 @@ tbody td{padding:12px 14px;vertical-align:middle}
     </table>
   </div>
 
-  <div class="nudge-bar" style="margin-top:14px">
-    <div class="nudge-text">⚡ Competitors are cited from owned content on 6 prompts where you have no page.</div>
-    <button class="nudge-btn" onclick="nav('recommendations')">View recommendations</button>
-  </div>
+
 
   <div class="tcard">
     <div class="tbar">
@@ -666,12 +708,105 @@ tbody td{padding:12px 14px;vertical-align:middle}
 </div>
 
 <!-- ═══ PAGE: RECOMMENDATIONS ═══ -->
-<div class="page" id="page-recommendations">
+
+<!-- ═══ PAGE: CONTENT ACTIONS ═══ -->
+<div class="page" id="page-actions">
   <div class="ph">
-    <div><div class="pt">Recommendations</div><div class="ps">GSC pages matched to tracked prompts — surgical fixes that improve AI visibility without affecting search ranking</div></div>
-    <span style="font-size:11px;color:var(--muted)">GSC synced 2h ago</span>
+    <div>
+      <div class="pt">Content Actions</div>
+      <div class="ps">Prioritised actions based on your AEO and GSC data</div>
+    </div>
   </div>
-  <div id="rec-sections"></div>
+  <div class="cr-buckets">
+
+  <!-- ═══ BUCKET 1: REFRESH ═══ -->
+  <div class="cr-bucket">
+    <div class="cr-bhead">
+      <div class="cr-bhead-top">
+        <div class="cr-btitle">Refresh</div>
+        <div class="cr-bcount">14</div>
+      </div>
+      <div class="cr-bsub">pages need attention</div>
+      <div class="cr-gsc-badge"><span class="cr-gsc-dot"></span>GSC synced 2h ago</div>
+    </div>
+
+    <div class="cr-diag-lbl">Diagnostics</div>
+
+    <div class="cr-diag-rows">
+      <div class="cr-drow">
+        <div class="cr-dnum">7</div>
+        <div class="cr-ddesc"><strong>pages rank in search</strong> but aren't appearing in AI answers</div>
+        <div class="dtrend">Avg rank #4 · 0% cited in AI</div>
+      </div>
+      <div class="cr-drow">
+        <div class="cr-dnum">4</div>
+        <div class="cr-ddesc"><strong>pages losing ground</strong> in both search and AI</div>
+        <div class="dtrend">↓ GSC −12% · AEO −8% (4w)</div>
+      </div>
+      <div class="cr-drow">
+        <div class="cr-dnum">6</div>
+        <div class="cr-ddesc"><strong>competitors outperforming you</strong> in AI answers for same prompts</div>
+        <div class="dtrend">You 21% · Comp avg 38%</div>
+      </div>
+      <div class="cr-drow">
+        <div class="cr-dnum">3</div>
+        <div class="cr-ddesc"><strong>pages aging out</strong> — not updated in 3+ months</div>
+        <div class="dtrend">Avg 7 months since last update</div>
+      </div>
+      <div class="cr-drow">
+        <div class="cr-dnum">5</div>
+        <div class="cr-ddesc"><strong>structural gaps</strong> preventing LLM extraction — missing verdict, tables, or clear answer</div>
+        <div class="dtrend">8 missing verdict · 5 no table</div>
+      </div>
+    </div>
+
+    <div class="cr-bfoot">
+      <button class="cr-bfoot-btn">Go to Refresher →</button>
+    </div>
+  </div>
+
+  <!-- ═══ BUCKET 2: CREATE ═══ -->
+  <div class="cr-bucket">
+    <div class="cr-bhead">
+      <div class="cr-bhead-top">
+        <div class="cr-btitle">Create</div>
+        <div class="cr-bcount">12</div>
+      </div>
+      <div class="cr-bsub">content gaps identified</div>
+      <div class="cr-gsc-badge"><span class="cr-gsc-dot"></span>GSC synced 2h ago</div>
+    </div>
+
+    <div class="cr-diag-lbl">Diagnostics</div>
+
+    <div class="cr-diag-rows">
+      <div class="cr-drow">
+        <div class="cr-dnum">4</div>
+        <div class="cr-ddesc"><strong>tracked prompts</strong> with no matching ranked page</div>
+        <div class="dtrend">Est. 4.2k searches unaddressed</div>
+      </div>
+      <div class="cr-drow">
+        <div class="cr-dnum">3</div>
+        <div class="cr-ddesc"><strong>topic areas</strong> where competitors rank but you have no content</div>
+        <div class="dtrend">Comp avg 8 pages · You 0</div>
+      </div>
+      <div class="cr-drow">
+        <div class="cr-dnum">2</div>
+        <div class="cr-ddesc"><strong>high-volume search queries</strong> not yet tracked as prompts</div>
+        <div class="dtrend">3.1k impressions not tracked</div>
+      </div>
+      <div class="cr-drow">
+        <div class="cr-dnum">3</div>
+        <div class="cr-ddesc"><strong>topic clusters</strong> where competitors have broad coverage but you have none</div>
+        <div class="dtrend">Comp ranks 24 keywords · You 2</div>
+      </div>
+    </div>
+
+    <div class="cr-bfoot">
+      <button class="cr-bfoot-btn">Go to Strategizer →</button>
+    </div>
+  </div>
+
+</div>
 </div>
 
 </div><!-- /shell -->
@@ -721,6 +856,7 @@ tbody td{padding:12px 14px;vertical-align:middle}
     <button class="rpf-btn" onclick="closeRecPanel()">Dismiss</button>
   </div>
 </div>
+
 
 
 <!-- ═══ ADD PROMPT MODAL ═══ -->
@@ -776,7 +912,10 @@ function nav(id) {
   document.getElementById('page-'+id).classList.add('active');
   document.getElementById('ni-'+id).classList.add('active');
   if(id==='overview' && !chartInited){ initChart(); chartInited=true; }
-  if(id==='recommendations'){ buildRecSections(); }
+  if(id==='actions'){
+    document.getElementById('page-actions').scrollTop = 0;
+    document.querySelector('.shell').scrollTop = 0;
+  }
 }
 
 function exportData(){ alert('Export data — CSV download would trigger here'); }
@@ -819,14 +958,14 @@ const CHART_OPTS=(ymax)=>({
 function initChart(){
   // Chart 1: competitive
   const ctx1=document.getElementById('chart1').getContext('2d');
-  chart1=new Chart(ctx1,{type:'line',data:{labels:WEEKS,datasets:[{label:'You',data:TREND.you_avg,borderColor:'#3730a3',backgroundColor:'rgba(55,48,163,.08)',tension:.4,pointRadius:3,borderWidth:2.5,fill:true}]},options:CHART_OPTS(50)});
+  chart1=new Chart(ctx1,{type:'line',data:{labels:WEEKS,datasets:[{label:'You',data:TREND.you_avg,borderColor:'#cc4100',backgroundColor:'rgba(55,48,163,.08)',tension:.4,pointRadius:3,borderWidth:2.5,fill:true}]},options:CHART_OPTS(50)});
 
   // Chart 2: platform
   const ctx2=document.getElementById('chart2').getContext('2d');
   chart2=new Chart(ctx2,{type:'line',data:{labels:WEEKS,datasets:[
-    {label:'ChatGPT',  data:TREND.cgpt_avg,borderColor:'#818cf8',backgroundColor:'transparent',tension:.4,pointRadius:3,borderWidth:2},
+    {label:'ChatGPT',  data:TREND.cgpt_avg,borderColor:'#ff8c5a',backgroundColor:'transparent',tension:.4,pointRadius:3,borderWidth:2},
     {label:'Perplexity',data:TREND.pplx_avg,borderColor:'#a5b4fc',backgroundColor:'transparent',tension:.4,pointRadius:3,borderWidth:2},
-    {label:'Gemini',   data:TREND.gem_avg, borderColor:'#c7d2fe',backgroundColor:'transparent',tension:.4,pointRadius:3,borderWidth:2},
+    {label:'Gemini',   data:TREND.gem_avg, borderColor:'#ffd4c2',backgroundColor:'transparent',tension:.4,pointRadius:3,borderWidth:2},
   ]},options:CHART_OPTS(35)});
 
   updateC1Legend();
@@ -865,7 +1004,7 @@ function updateCompChart(){
   const sfx=c1mode==='avg'?'_avg':'_wk';
   const checked=[...document.querySelectorAll('#compDrop input:checked')].map(el=>el.value);
   // rebuild datasets: you first, then selected comps
-  chart1.data.datasets=[{label:'You',data:TREND['you'+sfx],borderColor:'#3730a3',backgroundColor:'rgba(55,48,163,.08)',tension:.4,pointRadius:3,borderWidth:2.5,fill:true}];
+  chart1.data.datasets=[{label:'You',data:TREND['you'+sfx],borderColor:'#cc4100',backgroundColor:'rgba(55,48,163,.08)',tension:.4,pointRadius:3,borderWidth:2.5,fill:true}];
   checked.forEach(k=>{
     chart1.data.datasets.push({label:COMP_NAMES[k],data:TREND[k+sfx],borderColor:COMP_COLORS[k],backgroundColor:'transparent',tension:.4,pointRadius:3,borderWidth:2});
   });
@@ -878,7 +1017,7 @@ function updateCompChart(){
 function updateC1Legend(){
   const leg=document.getElementById('c1leg');
   const checked=[...document.querySelectorAll('#compDrop input:checked')].map(el=>el.value);
-  leg.innerHTML=`<div class="cl"><div class="cs" style="background:#3730a3"></div> You</div>`;
+  leg.innerHTML=`<div class="cl"><div class="cs" style="background:#cc4100"></div> You</div>`;
   checked.forEach(k=>{leg.innerHTML+=`<div class="cl"><div class="cs" style="background:${COMP_COLORS[k]}"></div> ${COMP_NAMES[k]}</div>`;});
 }
 
@@ -888,7 +1027,7 @@ function updateC1Legend(){
 const PTOPICS=['Campaign mgmt','AEO / AI visibility','Integrations','Content strategy','Analytics','Reddit engagement'];
 const PINTS=[{k:'alt',l:'Alternatives\n& comparisons'},{k:'best',l:'Best in\ncategory'},{k:'wrk',l:'Works\nwith...'},{k:'prb',l:'Solve a\nproblem'},{k:'wrt',l:'Is it\nworth it?'}];
 const PHM={'Campaign mgmt':{alt:4,best:3,wrk:1,prb:4,wrt:0},'AEO / AI visibility':{alt:1,best:5,wrk:0,prb:2,wrt:0},'Integrations':{alt:0,best:1,wrk:1,prb:0,wrt:0},'Content strategy':{alt:4,best:5,wrk:0,prb:2,wrt:1},'Analytics':{alt:1,best:1,wrk:0,prb:2,wrt:0},'Reddit engagement':{alt:2,best:2,wrk:0,prb:0,wrt:0}};
-const SHADES=['','#e0e7ff','#c7d2fe','#818cf8','#4F46E5','#3730a3'];
+const SHADES=['','#ffe8de','#ffd4c2','#ff8c5a','#FF5A1F','#cc4100'];
 const STR=['','Very weak','Weak','Contested','Strong','Very strong'];
 const tipEl=document.getElementById('tip');
 
@@ -936,12 +1075,12 @@ function toggleHM(){
    PROMPTS: TABLE
 ══════════════════════════════════════════ */
 const P=[
-  {id:1,sig:'gap',text:'Top [Competitor A] alternatives',intent:'alt',iLabel:'Alternatives &amp; comparisons',vis:'0%',vc:'mb',pos:'—',pc:'mn',sent:'—',sc:'mn',topics:['competitor comparison','alternatives','switching'],brands:[{n:'Competitor A',p:'#1.2',you:false,c:'#f59e0b'},{n:'Competitor C',p:'#2.4',you:false,c:'#8b5cf6'},{n:'You',p:'Not cited',you:true,c:'#4F46E5'}],cits:[{t:'G2',tc:'ct-g2',u:'g2.com/compare/competitor-a-vs-alternatives'},{t:'Reddit',tc:'ct-rd',u:'reddit.com/r/marketing/competitor-a-review'},{t:'Editorial',tc:'ct-ed',u:'techradar.com/best-marketing-automation'}],resp:{chatgpt:'When looking for alternatives to <span class="co">Competitor A</span>, most teams consider <span class="co">Competitor C</span>. These platforms offer similar campaign management with different pricing.',perplexity:'<span class="co">Competitor A</span> alternatives vary by use case. For enterprise, <span class="co">Competitor C</span> is recommended.',gemini:'Top alternatives to <span class="co">Competitor A</span> include <span class="co">Competitor C</span> depending on budget.'}},
-  {id:2,sig:'gap',text:'Does [Brand] integrate with HubSpot?',intent:'wrk',iLabel:'Works with...',vis:'4%',vc:'mb',pos:'#4.8',pc:'mm',sent:'Neutral',sc:'mm',topics:['hubspot','integrations','crm'],brands:[{n:'Competitor A',p:'#1.0',you:false,c:'#f59e0b'},{n:'You',p:'#4.8',you:true,c:'#4F46E5'}],cits:[{t:'Owned',tc:'ct-ow',u:'brand.com/integrations/hubspot'},{t:'G2',tc:'ct-g2',u:'g2.com/products/brand/integrations'}],resp:{chatgpt:'HubSpot integrates with many platforms. <span class="co">Competitor A</span> offers a native connector. <span class="bm">[Brand]</span> has a basic integration via API.',perplexity:'For HubSpot integrations, <span class="co">Competitor A</span> is most cited. <span class="bm">[Brand]</span> supports HubSpot through a third-party connector.',gemini:'Most enterprise tools offer native HubSpot integrations. <span class="bm">[Brand]</span> supports it but documentation is limited.'}},
-  {id:3,sig:'watch',text:'[Brand] vs [Competitor B] — which is better?',intent:'alt',iLabel:'Alternatives &amp; comparisons',vis:'6%',vc:'mm',pos:'#4.2',pc:'mm',sent:'Neutral',sc:'mm',topics:['competitor comparison','vs','campaign management'],brands:[{n:'Competitor B',p:'#1.6',you:false,c:'#8b5cf6'},{n:'You',p:'#4.2',you:true,c:'#4F46E5'}],cits:[{t:'G2',tc:'ct-g2',u:'g2.com/compare/brand-vs-competitor-b'},{t:'Reddit',tc:'ct-rd',u:'reddit.com/r/saas/brand-vs-competitor'}],resp:{chatgpt:'Comparing <span class="bm">[Brand]</span> and <span class="co">Competitor B</span>: <span class="co">Competitor B</span> suits larger teams. <span class="bm">[Brand]</span> is noted for AI-native approach.',perplexity:'<span class="co">Competitor B</span> has stronger recognition. <span class="bm">[Brand]</span> is growing in AEO.',gemini:'<span class="co">Competitor B</span> has a larger user base. <span class="bm">[Brand]</span> differentiates on AI-native intelligence.'}},
-  {id:4,sig:'watch',text:'How do I improve AI answer visibility for B2B SaaS?',intent:'prb',iLabel:'Solve a problem',vis:'11%',vc:'mm',pos:'#3.4',pc:'mm',sent:'Positive',sc:'mg',topics:['aeo','ai visibility','b2b saas'],brands:[{n:'Competitor A',p:'#2.1',you:false,c:'#f59e0b'},{n:'You',p:'#3.4',you:true,c:'#4F46E5'}],cits:[{t:'Owned',tc:'ct-ow',u:'brand.com/blog/aeo-guide'},{t:'Editorial',tc:'ct-ed',u:'searchengineland.com/aeo-2025'},{t:'Reddit',tc:'ct-rd',u:'reddit.com/r/seo/aeo-saas'}],resp:{chatgpt:'Improving AI visibility involves structuring content for LLM extraction. Tools like <span class="bm">[Brand]</span> and <span class="co">Competitor A</span> are emerging.',perplexity:'AEO for B2B SaaS differs from SEO. <span class="bm">[Brand]</span> offers prompt tracking for this use case.',gemini:'AI visibility depends on content structure. <span class="co">Competitor A</span> and <span class="bm">[Brand]</span> both address this.'}},
-  {id:5,sig:'winning',text:'Best alternative to [Competitor C]',intent:'alt',iLabel:'Alternatives &amp; comparisons',vis:'18%',vc:'mg',pos:'#1.8',pc:'mg',sent:'Positive',sc:'mg',topics:['competitor comparison','alternatives'],brands:[{n:'You',p:'#1.8',you:true,c:'#4F46E5'},{n:'Competitor C',p:'#3.1',you:false,c:'#10b981'}],cits:[{t:'Owned',tc:'ct-ow',u:'brand.com/vs/competitor-c'},{t:'G2',tc:'ct-g2',u:'g2.com/compare/brand-vs-competitor-c'}],resp:{chatgpt:'The best alternative to <span class="co">Competitor C</span> for AI-native campaign intelligence is <span class="bm">[Brand]</span>, offering stronger AEO monitoring.',perplexity:'<span class="bm">[Brand]</span> is a strong alternative to <span class="co">Competitor C</span> for teams tracking AI visibility.',gemini:'For those moving from <span class="co">Competitor C</span>, <span class="bm">[Brand]</span> offers a compelling AI-native alternative.'}},
-  {id:6,sig:'winning',text:'Best marketing automation tools for B2B startups',intent:'best',iLabel:'Best in category',vis:'22%',vc:'mg',pos:'#2.1',pc:'mg',sent:'Positive',sc:'mg',topics:['marketing automation','b2b','startups'],brands:[{n:'Competitor A',p:'#1.4',you:false,c:'#f59e0b'},{n:'You',p:'#2.1',you:true,c:'#4F46E5'},{n:'Competitor B',p:'#3.2',you:false,c:'#8b5cf6'}],cits:[{t:'Owned',tc:'ct-ow',u:'brand.com/blog/b2b-marketing'},{t:'G2',tc:'ct-g2',u:'g2.com/categories/marketing-automation'},{t:'Editorial',tc:'ct-ed',u:'techcrunch.com/best-martech-2025'}],resp:{chatgpt:'Top tools for B2B startups: <span class="co">Competitor A</span>, <span class="bm">[Brand]</span>, <span class="co">Competitor B</span>. <span class="bm">[Brand]</span> leads on AI-native campaign intelligence.',perplexity:'<span class="co">Competitor A</span> leads on features; <span class="bm">[Brand]</span> gains traction for AEO-focused teams.',gemini:'Top picks include <span class="co">Competitor A</span> and <span class="bm">[Brand]</span>, the latter with strong AEO capabilities.'}},
+  {id:1,sig:'gap',text:'Top [Competitor A] alternatives',intent:'alt',iLabel:'Alternatives &amp; comparisons',vis:'0%',vc:'mb',pos:'—',pc:'mn',sent:'—',sc:'mn',topics:['competitor comparison','alternatives','switching'],brands:[{n:'Competitor A',p:'#1.2',you:false,c:'#f59e0b'},{n:'Competitor C',p:'#2.4',you:false,c:'#8b5cf6'},{n:'You',p:'Not cited',you:true,c:'#FF5A1F'}],cits:[{t:'G2',tc:'ct-g2',u:'g2.com/compare/competitor-a-vs-alternatives'},{t:'Reddit',tc:'ct-rd',u:'reddit.com/r/marketing/competitor-a-review'},{t:'Editorial',tc:'ct-ed',u:'techradar.com/best-marketing-automation'}],resp:{chatgpt:'When looking for alternatives to <span class="co">Competitor A</span>, most teams consider <span class="co">Competitor C</span>. These platforms offer similar campaign management with different pricing.',perplexity:'<span class="co">Competitor A</span> alternatives vary by use case. For enterprise, <span class="co">Competitor C</span> is recommended.',gemini:'Top alternatives to <span class="co">Competitor A</span> include <span class="co">Competitor C</span> depending on budget.'}},
+  {id:2,sig:'gap',text:'Does [Brand] integrate with HubSpot?',intent:'wrk',iLabel:'Works with...',vis:'4%',vc:'mb',pos:'#4.8',pc:'mm',sent:'Neutral',sc:'mm',topics:['hubspot','integrations','crm'],brands:[{n:'Competitor A',p:'#1.0',you:false,c:'#f59e0b'},{n:'You',p:'#4.8',you:true,c:'#FF5A1F'}],cits:[{t:'Owned',tc:'ct-ow',u:'brand.com/integrations/hubspot'},{t:'G2',tc:'ct-g2',u:'g2.com/products/brand/integrations'}],resp:{chatgpt:'HubSpot integrates with many platforms. <span class="co">Competitor A</span> offers a native connector. <span class="bm">[Brand]</span> has a basic integration via API.',perplexity:'For HubSpot integrations, <span class="co">Competitor A</span> is most cited. <span class="bm">[Brand]</span> supports HubSpot through a third-party connector.',gemini:'Most enterprise tools offer native HubSpot integrations. <span class="bm">[Brand]</span> supports it but documentation is limited.'}},
+  {id:3,sig:'watch',text:'[Brand] vs [Competitor B] — which is better?',intent:'alt',iLabel:'Alternatives &amp; comparisons',vis:'6%',vc:'mm',pos:'#4.2',pc:'mm',sent:'Neutral',sc:'mm',topics:['competitor comparison','vs','campaign management'],brands:[{n:'Competitor B',p:'#1.6',you:false,c:'#8b5cf6'},{n:'You',p:'#4.2',you:true,c:'#FF5A1F'}],cits:[{t:'G2',tc:'ct-g2',u:'g2.com/compare/brand-vs-competitor-b'},{t:'Reddit',tc:'ct-rd',u:'reddit.com/r/saas/brand-vs-competitor'}],resp:{chatgpt:'Comparing <span class="bm">[Brand]</span> and <span class="co">Competitor B</span>: <span class="co">Competitor B</span> suits larger teams. <span class="bm">[Brand]</span> is noted for AI-native approach.',perplexity:'<span class="co">Competitor B</span> has stronger recognition. <span class="bm">[Brand]</span> is growing in AEO.',gemini:'<span class="co">Competitor B</span> has a larger user base. <span class="bm">[Brand]</span> differentiates on AI-native intelligence.'}},
+  {id:4,sig:'watch',text:'How do I improve AI answer visibility for B2B SaaS?',intent:'prb',iLabel:'Solve a problem',vis:'11%',vc:'mm',pos:'#3.4',pc:'mm',sent:'Positive',sc:'mg',topics:['aeo','ai visibility','b2b saas'],brands:[{n:'Competitor A',p:'#2.1',you:false,c:'#f59e0b'},{n:'You',p:'#3.4',you:true,c:'#FF5A1F'}],cits:[{t:'Owned',tc:'ct-ow',u:'brand.com/blog/aeo-guide'},{t:'Editorial',tc:'ct-ed',u:'searchengineland.com/aeo-2025'},{t:'Reddit',tc:'ct-rd',u:'reddit.com/r/seo/aeo-saas'}],resp:{chatgpt:'Improving AI visibility involves structuring content for LLM extraction. Tools like <span class="bm">[Brand]</span> and <span class="co">Competitor A</span> are emerging.',perplexity:'AEO for B2B SaaS differs from SEO. <span class="bm">[Brand]</span> offers prompt tracking for this use case.',gemini:'AI visibility depends on content structure. <span class="co">Competitor A</span> and <span class="bm">[Brand]</span> both address this.'}},
+  {id:5,sig:'winning',text:'Best alternative to [Competitor C]',intent:'alt',iLabel:'Alternatives &amp; comparisons',vis:'18%',vc:'mg',pos:'#1.8',pc:'mg',sent:'Positive',sc:'mg',topics:['competitor comparison','alternatives'],brands:[{n:'You',p:'#1.8',you:true,c:'#FF5A1F'},{n:'Competitor C',p:'#3.1',you:false,c:'#10b981'}],cits:[{t:'Owned',tc:'ct-ow',u:'brand.com/vs/competitor-c'},{t:'G2',tc:'ct-g2',u:'g2.com/compare/brand-vs-competitor-c'}],resp:{chatgpt:'The best alternative to <span class="co">Competitor C</span> for AI-native campaign intelligence is <span class="bm">[Brand]</span>, offering stronger AEO monitoring.',perplexity:'<span class="bm">[Brand]</span> is a strong alternative to <span class="co">Competitor C</span> for teams tracking AI visibility.',gemini:'For those moving from <span class="co">Competitor C</span>, <span class="bm">[Brand]</span> offers a compelling AI-native alternative.'}},
+  {id:6,sig:'winning',text:'Best marketing automation tools for B2B startups',intent:'best',iLabel:'Best in category',vis:'22%',vc:'mg',pos:'#2.1',pc:'mg',sent:'Positive',sc:'mg',topics:['marketing automation','b2b','startups'],brands:[{n:'Competitor A',p:'#1.4',you:false,c:'#f59e0b'},{n:'You',p:'#2.1',you:true,c:'#FF5A1F'},{n:'Competitor B',p:'#3.2',you:false,c:'#8b5cf6'}],cits:[{t:'Owned',tc:'ct-ow',u:'brand.com/blog/b2b-marketing'},{t:'G2',tc:'ct-g2',u:'g2.com/categories/marketing-automation'},{t:'Editorial',tc:'ct-ed',u:'techcrunch.com/best-martech-2025'}],resp:{chatgpt:'Top tools for B2B startups: <span class="co">Competitor A</span>, <span class="bm">[Brand]</span>, <span class="co">Competitor B</span>. <span class="bm">[Brand]</span> leads on AI-native campaign intelligence.',perplexity:'<span class="co">Competitor A</span> leads on features; <span class="bm">[Brand]</span> gains traction for AEO-focused teams.',gemini:'Top picks include <span class="co">Competitor A</span> and <span class="bm">[Brand]</span>, the latter with strong AEO capabilities.'}},
 ];
 const ORD={gap:0,watch:1,winning:2};
 const IC={alt:'it-alt',best:'it-best',wrk:'it-wrk',prb:'it-prb',wrt:'it-wrt'};
@@ -1129,7 +1268,7 @@ function buildBrandTable(){
       `<td style="font-size:13px;font-weight:600;color:var(--slate)">${brand.sources} <span style="font-size:11px;font-weight:400;color:var(--muted)">sources</span></td>`+
       `<td>
         <div class="bft-bar">
-          <div class="bft-seg" style="width:${barW}px;background:${brand.you?'#4F46E5':'#c7d2fe'}"></div>
+          <div class="bft-seg" style="width:${barW}px;background:${brand.you?'#FF5A1F':'#ffd4c2'}"></div>
           <span style="font-size:12px;font-weight:600;color:var(--slate);margin-left:6px">${brand.responses}</span>
         </div>
       </td>`+
@@ -1288,7 +1427,7 @@ function renderQueue(){
     div.innerHTML=
       `<div style="flex:1"><div class="qi-txt">${item.text}</div>`+
       `<div class="qi-tags">`+
-        `<span class="itag" style="font-size:10px;padding:2px 6px;background:#eef2ff;color:#4338ca">${item.intent}</span>`+
+        `<span class="itag" style="font-size:10px;padding:2px 6px;background:#fff4f0;color:#4338ca">${item.intent}</span>`+
         `<span class="tchip" style="font-size:10px">${item.topic}</span>`+
       `</div>`+
       (item.suggested?'<span class="qi-slbl">Suggested from onboarding</span>':'')+
@@ -1328,6 +1467,7 @@ build('all');
 buildCitHM('you');
 buildCitTable(CITS);
 buildBrandTable();
+buildCitShare();
 // Init chart on load since overview is default page
 window.addEventListener('load',()=>{
   initChart(); chartInited=true;
@@ -1421,12 +1561,12 @@ function buildRecSections(){
   document.getElementById('rec-sections').innerHTML=`
     <div class="rec-section">
       <div class="rec-sec-head">
-        <div class="rec-sec-dot" style="background:#4F46E5"></div>
+        <div class="rec-sec-dot" style="background:#FF5A1F"></div>
         <div class="rec-sec-titles">
           <div class="rec-sec-name">Optimise existing page</div>
           <div class="rec-sec-desc">Each fix targets only the section preventing citation — your search ranking is preserved</div>
         </div>
-        <span class="rec-sec-badge" style="background:#eef2ff;color:#3730a3">${REC_DATA.length} pages · ${total} prompts</span>
+        <span class="rec-sec-badge" style="background:#fff4f0;color:#cc4100">${REC_DATA.length} pages · ${total} prompts</span>
       </div>
       <div class="rec-tbl-head"><span>Page</span><span>Opportunity</span><span></span></div>
       ${rows}
@@ -1519,28 +1659,37 @@ const CIT_APP=[
   {label:'Editorial blogs',  responses:84,  you:26, compb:24,  compa:20, others:14},
   {label:'Owned content',    responses:62,  you:9,  compb:19,  compa:14, others:20},
 ];
+let activeCitSource = 'G2 / Capterra';
+function selectCitSource(btn, label){
+  activeCitSource = label;
+  document.querySelectorAll('.cit-src-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  buildCitGroupedBars();
+}
 function buildCitGroupedBars(){
   const wrap=document.getElementById('cit-grouped-bars');
   if(!wrap)return;
-  const colors={you:'#3730a3',compb:'#818cf8',compa:'#c7d2fe',others:'#e0e7ff'};
+  const colors={you:'#cc4100',compb:'#ff8c5a',compa:'#ffd4c2',others:'#ffe8de'};
   const labels={you:'You',compb:'Comp B',compa:'Comp A',others:'Others'};
+  const d = CIT_APP.find(x=>x.label===activeCitSource) || CIT_APP[0];
+  const maxVal = Math.max(d.you, d.compb, d.compa, d.others);
   wrap.innerHTML='';
-  CIT_APP.forEach(d=>{
-    const maxVal=Math.max(d.you,d.compb,d.compa,d.others);
-    const div=document.createElement('div');
-    div.style.cssText='display:flex;align-items:flex-start;gap:14px;margin-bottom:14px';
-    const nameDiv=`<div style="width:148px;flex-shrink:0;font-size:12px;font-weight:500;padding-top:2px">${d.label}</div>`;
-    const freqDiv=`<div style="width:80px;flex-shrink:0;font-size:11px;color:var(--muted);padding-top:2px">${d.responses} responses</div>`;
-    const bars=['you','compb','compa','others'].map(k=>`
-      <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
-        <div style="width:52px;font-size:10px;color:var(--muted)">${labels[k]}</div>
-        <div style="flex:1;height:12px;background:#f1f5f9;border-radius:3px;overflow:hidden">
-          <div style="width:${Math.round(d[k]/maxVal*100)}%;height:100%;background:${colors[k]};border-radius:3px"></div>
-        </div>
-        <div style="width:28px;text-align:right;font-size:10px;font-weight:600;color:var(--slate)">${d[k]}</div>
-      </div>`).join('');
-    div.innerHTML=nameDiv+freqDiv+`<div style="flex:1">${bars}</div>`;
-    wrap.appendChild(div);
+  const header = document.createElement('div');
+  header.style.cssText='font-size:11px;color:var(--muted);margin-bottom:14px';
+  header.textContent=`${d.responses} total responses`;
+  wrap.appendChild(header);
+  ['you','compb','compa','others'].forEach(k=>{
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:10px;margin-bottom:10px';
+    row.innerHTML=
+      `<div style="width:80px;flex-shrink:0;font-size:12px;font-weight:500;color:var(--text)">${labels[k]}</div>`+
+      `<div style="flex:1;height:20px;background:#f1f5f9;border-radius:4px;overflow:hidden">`+
+        `<div style="width:${Math.round(d[k]/maxVal*100)}%;height:100%;background:${colors[k]};border-radius:4px;display:flex;align-items:center;padding-left:8px">`+
+          `<span style="font-size:11px;font-weight:600;color:${k==='compa'||k==='others'?'var(--slate)':'#fff'}">${d[k]}</span>`+
+        `</div>`+
+      `</div>`+
+      `<div style="width:36px;text-align:right;font-size:12px;font-weight:600;color:var(--slate)">${Math.round(d[k]/d.responses*100)}%</div>`;
+    wrap.appendChild(row);
   });
 }
 
@@ -1555,7 +1704,7 @@ const SOV_DATA=[
 function buildSOVChart(){
   const wrap=document.getElementById('sov-wrap');
   if(!wrap)return;
-  const colors={you:'#3730a3',compb:'#818cf8',compa:'#c7d2fe',compc:'#e0e7ff'};
+  const colors={you:'#cc4100',compb:'#ff8c5a',compa:'#ffd4c2',compc:'#ffe8de'};
   const names={you:'You',compb:'Comp B',compa:'Comp A',compc:'Comp C'};
   wrap.innerHTML='';
   SOV_DATA.forEach(d=>{
@@ -1629,7 +1778,7 @@ function buildCitShare(){
     row.style.cssText='display:flex;align-items:center;gap:12px;margin-bottom:8px';
     row.innerHTML='<div style="width:130px;flex-shrink:0;font-size:12px;font-weight:500">'+d.label+'</div>'
       +'<div style="flex:1;height:22px;background:#f1f5f9;border-radius:5px;overflow:hidden">'
-      +'<div style="width:'+d.pct+'%;height:100%;background:#4F46E5;border-radius:5px;display:flex;align-items:center;padding-left:8px">'
+      +'<div style="width:'+d.pct+'%;height:100%;background:#FF5A1F;border-radius:5px;display:flex;align-items:center;padding-left:8px">'
       +'<span style="font-size:11px;font-weight:600;color:#fff">'+d.pct+'%</span>'
       +'</div></div>';
     wrap.appendChild(row);
